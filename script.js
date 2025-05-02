@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Seletores e Funções Auxiliares (sem mudanças significativas aqui) ---
+    // --- Seletores e Funções Auxiliares ---
     const form = document.getElementById('registration-form');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
@@ -7,112 +7,80 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageDiv = document.getElementById('message');
     const appContainer = document.getElementById('app-container');
 
-    /** Aplica ou remove o tema visual */
+    // A função applyTheme ainda é necessária para a exibição temporária durante o submit
     function applyTheme(themeName) {
+        if (!appContainer) return;
         const themes = ['theme-pau-brasil', 'theme-castanheira', 'theme-peroba-rosa'];
-        appContainer.classList.remove(...themes); // Remove todos os temas possíveis
+        appContainer.classList.remove(...themes);
 
         if (themeName && themes.includes(`theme-${themeName}`)) {
             appContainer.classList.add(`theme-${themeName}`);
-            console.log(`Tema aplicado: ${themeName}`);
+            console.log(`Tema ${themeName} aplicado.`);
         } else {
             console.log('Tema visual removido ou nome inválido.');
         }
     }
 
-    /** Carrega o tema salvo no localStorage */
-    function loadSavedTheme() {
-        const savedTheme = localStorage.getItem('userTheme');
-        applyTheme(savedTheme); // Aplica o tema salvo ou nenhum se não houver/inválido
-        if (savedTheme) {
-            const savedRadio = document.querySelector(`input[name="tree"][value="${savedTheme}"]`);
-            if (savedRadio) {
-                savedRadio.checked = true;
-            }
-        } else {
-             console.log('Nenhum tema salvo encontrado no localStorage.');
-        }
-    }
-
-     /** Exibe mensagem */
-     function showMessage(text, type = 'success') {
+    // Funções showMessage e clearMessage (sem alterações)
+    function showMessage(text, type = 'success') {
         messageDiv.textContent = text;
-        messageDiv.className = `message-${type}`;
-     }
-
-     /** Limpa mensagem */
-     function clearMessage() {
+        messageDiv.className = '';
+        messageDiv.classList.add(`message-${type}`);
+    }
+    function clearMessage() {
         messageDiv.textContent = '';
         messageDiv.className = '';
-     }
+    }
 
-    // --- Lógica Principal ---
+    // --- Lógica Principal da Página de Cadastro ---
 
-    // 1. Carregar tema salvo ao entrar na página
-    loadSavedTheme();
+    console.log("Página de cadastro carregada com tema padrão.");
 
-    // 2. Adicionar listener para o envio do formulário
+
+    // 2. Adicionar listener para o envio do formulário (lógica interna permanece a mesma)
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         clearMessage();
 
-        // --- Validação ---
+        // Validação...
         const username = usernameInput.value.trim();
         const password = passwordInput.value;
         const selectedTreeRadio = document.querySelector('input[name="tree"]:checked');
 
         if (!selectedTreeRadio) {
-            showMessage('Por favor, selecione uma árvore avatar.', 'error');
-            return;
+            showMessage('Por favor, selecione uma árvore avatar.', 'error'); return;
         }
         const selectedTreeValue = selectedTreeRadio.value;
-
         if (!username || !password) {
-             showMessage('Por favor, preencha o usuário e a senha.', 'error');
-             return;
+            showMessage('Por favor, preencha o usuário e a senha.', 'error'); return;
         }
 
-        // --- Processamento do Sucesso ---
-
-        // Criar o objeto e JSON (como antes)
+        // Processamento do Sucesso...
         const userData = { username, password, treeAvatar: selectedTreeValue };
         const userDataJSON = JSON.stringify(userData, null, 2);
         console.log("Objeto de Usuário (JSON):", userDataJSON);
 
-        // 1. Salvar a escolha no localStorage (para persistência)
+        // Salvar no localStorage (AINDA NECESSÁRIO para a próxima página)
         try {
             localStorage.setItem('userTheme', selectedTreeValue);
             console.log(`Tema '${selectedTreeValue}' salvo no localStorage.`);
-        } catch (e) {
-            console.error("Erro ao salvar no localStorage:", e);
-        }
+        } catch (e) { console.error("Erro ao salvar no localStorage:", e); }
 
-        // 2. APLICAR O TEMA IMEDIATAMENTE para feedback visual
+        // Aplicar tema TEMPORARIAMENTE
         applyTheme(selectedTreeValue);
 
-        // 3. Exibir mensagem de sucesso (já sobre o fundo colorido)
-        showMessage(`Cadastro de ${username} ok! Tema ${selectedTreeValue} aplicado temporariamente.`, 'success');
+        // Exibir mensagem de sucesso
+        showMessage(`Cadastro de ${username} realizado! Redirecionando...`, 'success');
 
-        // 4. Limpar o formulário
-        form.reset(); // Faz sentido limpar logo
+        // Limpar formulário
+        form.reset();
 
-        // 5. AGENDAR A REMOÇÃO DO TEMA VISUAL após um tempo
-        const visualThemeDuration = 1500; // Duração em milissegundos (1.5 segundos)
-        console.log(`Agendando remoção do tema visual em ${visualThemeDuration}ms`);
-
+        // Agendar reset visual e redirecionamento
+        const redirectDelay = 1500;
         setTimeout(() => {
-            applyTheme(null); // Remove a classe de tema, voltando ao branco/padrão
-            console.log('Tema visual resetado para o padrão.');
-            // Opcional: Limpar a mensagem de sucesso também após o tempo
-            // clearMessage();
-        }, visualThemeDuration);
-
-        // NÃO chamar loadSavedTheme() aqui.
-
-        // Comentário sobre envio ao backend (como antes)
-        /*
-         fetch('/api/register', { ... }) ...
-        */
+            applyTheme(null); // Limpa tema visual ANTES de redirecionar
+            window.location.href = 'reflorestamento.html'; // Redireciona
+        }, redirectDelay);
     });
 
 }); // Fim do DOMContentLoaded
