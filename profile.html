@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-container">
+        <h1 id="profile-heading">Perfil</h1>
+
+        <div class="profile-content">
+            <div class="profile-avatar">
+                <h2>Seu Avatar</h2>
+                <img id="avatar-image" src="images/placeholder_tree.png" alt="Avatar Árvore" width="150">
+                </div>
+
+            <div class="profile-info">
+                <h2>Informações</h2>
+                <div class="profile-stats">
+                    <p>Total de Árvores Plantadas: <strong id="tree-count">0</strong></p>
+                </div>
+                <div class="profile-actions">
+                     <button id="go-to-log-button" class="profile-button primary">Registrar Nova Ação de Plantio</button>
+                </div>
+                <div class="profile-bio">
+                    <h2>BIO</h2>
+                    <div id="bio-display-area">
+                        <p id="bio-text">Carregando BIO...</p>
+                        <button id="edit-bio-button" class="profile-button">Editar BIO</button>
+                    </div>
+                    <form id="bio-edit-form" class="hidden">
+                        <textarea id="bio-input" rows="4" placeholder="Escreva algo sobre você..."></textarea>
+                        <button type="submit" class="profile-button">Salvar BIO</button>
+                        <button type="button" id="cancel-bio-edit" class="profile-button secondary">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-nav">
+            <a href="log_reforestation.html">Registrar Plantio</a> |
+            <a href="index.html">Sair (Cadastro)</a>
+        </div>
+
+    </div>
+    <script src="profile_script.js"></script>
+</body>
+</html>
