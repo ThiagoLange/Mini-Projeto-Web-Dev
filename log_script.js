@@ -1,4 +1,4 @@
-// Arquivo: log_script.js
+// Arquivo: log_script.js (Para a página de log: log_reforestation.html)
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- Seletores de Elementos ---
@@ -9,73 +9,52 @@ document.addEventListener('DOMContentLoaded', () => {
     // Essencial para aplicar o tema herdado do cadastro:
     const appContainer = document.getElementById('app-container');
 
-    // --- Funções de Tema (Necessárias nesta página para aplicar o tema) ---
+    // --- Funções de Tema (Necessárias para aplicar o tema herdado) ---
 
-    /**
-     * Aplica a classe CSS de tema ao container principal.
-     * @param {string | null} themeName - O nome do tema (ex: 'pau-brasil') ou null para remover.
-     */
+    /** Aplica a classe CSS de tema ao container principal. */
     function applyTheme(themeName) {
-        // Garante que o container exista antes de tentar manipular classes
-        if (!appContainer) {
-            console.error("Elemento #app-container não encontrado nesta página.");
-            return;
-        }
+        if (!appContainer) { console.error("Log Page: Elemento #app-container não encontrado."); return; }
         const themes = ['theme-pau-brasil', 'theme-castanheira', 'theme-peroba-rosa'];
-        // Remove qualquer classe de tema anterior para evitar conflitos
         appContainer.classList.remove(...themes);
-
-        // Adiciona a classe de tema correta se um nome válido for fornecido
         if (themeName && themes.includes(`theme-${themeName}`)) {
             appContainer.classList.add(`theme-${themeName}`);
             console.log(`Log Page: Tema '${themeName}' aplicado.`);
         } else if (themeName) {
             console.warn(`Log Page: Nome de tema inválido recebido: ${themeName}`);
         } else {
-             console.log('Log Page: Nenhum tema para aplicar (ou tema removido).');
+            console.log('Log Page: Nenhum tema para aplicar.');
         }
     }
 
-    /**
-     * Lê o tema salvo no localStorage (definido na página de cadastro)
-     * e o aplica a esta página.
-     */
+    /** Lê o tema salvo no localStorage e o aplica a esta página. */
     function loadSavedTheme() {
         try {
-            const savedTheme = localStorage.getItem('userTheme'); // Lê a preferência
+            const savedTheme = localStorage.getItem('userTheme'); // Lê a preferência salva pelo cadastro
             if (savedTheme) {
                 console.log(`Log Page: Tema encontrado no localStorage: ${savedTheme}`);
                 applyTheme(savedTheme); // Aplica o estilo correspondente
             } else {
                 console.log('Log Page: Nenhum tema de usuário salvo encontrado. Usando estilo padrão.');
-                applyTheme(null); // Garante visual padrão se nenhum tema for encontrado
+                applyTheme(null);
             }
         } catch (e) {
             console.error("Log Page: Erro ao acessar localStorage ou aplicar tema:", e);
-            applyTheme(null); // Aplica visual padrão em caso de erro
+            applyTheme(null);
         }
     }
 
     // --- Funções de Mensagem ---
-
-    /**
-     * Exibe uma mensagem de feedback na área designada.
-     * @param {string} text - O texto da mensagem.
-     * @param {'success' | 'error'} type - O tipo de mensagem para estilização.
-     */
     function showLogMessage(text, type = 'success') {
-        if (!logMessageDiv) return; // Verifica se a div de mensagem existe
+        if (!logMessageDiv) return;
         logMessageDiv.textContent = text;
-        logMessageDiv.className = ''; // Limpa classes CSS anteriores
-        // Adiciona a classe base e a classe de tipo (ex: 'message-success')
+        logMessageDiv.className = '';
         logMessageDiv.classList.add('message', `message-${type}`);
     }
 
-    /** Limpa a área de mensagens. */
     function clearLogMessage() {
-         if (!logMessageDiv) return;
+        if (!logMessageDiv) return;
         logMessageDiv.textContent = '';
-        logMessageDiv.className = ''; // Remove classes de estilo
+        logMessageDiv.className = '';
     }
 
     // --- Lógica Principal da Página de Log ---
@@ -84,55 +63,73 @@ document.addEventListener('DOMContentLoaded', () => {
     loadSavedTheme();
 
     // 2. Configurar o listener para o envio do formulário de log
-    // Verifica se o formulário existe antes de adicionar o listener
     if (logForm) {
         logForm.addEventListener('submit', (event) => {
-            event.preventDefault(); // Impede o envio padrão que recarregaria a página
-            clearLogMessage(); // Limpa mensagens anteriores
+            event.preventDefault();
+            clearLogMessage();
 
-            // Obter valores dos campos do formulário
-            const quantity = parseInt(quantityInput.value, 10); // Converte para número
+            // Obter valores dos campos
+            const quantity = parseInt(quantityInput.value, 10);
             const species = speciesSelect.value;
 
-            // Validar os dados de entrada
+            // Validar os dados
             if (isNaN(quantity) || quantity <= 0) {
                 showLogMessage('Por favor, insira uma quantidade válida (maior que zero).', 'error');
-                quantityInput.focus(); // Coloca o foco no campo inválido
-                return; // Interrompe o processo se a quantidade for inválida
+                quantityInput.focus();
+                return;
             }
-
-            if (!species || species === "") { // Verifica se uma espécie foi selecionada
+            if (!species || species === "") {
                 showLogMessage('Por favor, selecione a espécie da árvore.', 'error');
-                speciesSelect.focus(); // Coloca o foco no campo inválido
-                return; // Interrompe o processo se a espécie não foi selecionada
+                speciesSelect.focus();
+                return;
             }
 
-            // Preparar o objeto de dados para o log (JSON)
-            const userId = null; // Placeholder para ID do usuário (será definido pelo backend)
+            // ATUALIZAR A CONTAGEM TOTAL DE ÁRVORES PLANTADAS
+            try {
+                let currentTotal = parseInt(localStorage.getItem('totalTreesPlanted') || '0', 10);
+                // Verifica se o valor lido é realmente um número, senão zera
+                if (isNaN(currentTotal)) {
+                    console.warn("Valor inválido encontrado em 'totalTreesPlanted', resetando para 0.");
+                    currentTotal = 0;
+                 }
+                currentTotal += quantity; // Adiciona a quantidade recém-plantada
+                localStorage.setItem('totalTreesPlanted', currentTotal.toString()); // Salva de volta como string
+                console.log(`Contagem total de árvores atualizada no localStorage: ${currentTotal}`);
+            } catch (e) {
+                console.error("Erro ao atualizar contagem de árvores no localStorage:", e);
+                // Informa o usuário, mas não impede o registro do log individual
+                showLogMessage("Aviso: Ocorreu um erro ao atualizar a contagem total de árvores.", "error");
+            }
+
+            // Preparar o objeto de log individual
+            const userId = null; // Placeholder
             const logEntry = {
-                userId: userId, // Inclui o campo userId, mesmo que nulo por enquanto
+                userId: userId,
                 quantity: quantity,
                 species: species,
-                // Adiciona um timestamp para saber quando o registro foi feito no frontend
-                timestamp: new Date().toISOString() // Formato padrão ISO 8601 (ex: "2025-05-01T15:49:52.123Z")
+                timestamp: new Date().toISOString()
             };
-
-            // Converter o objeto para uma string JSON formatada
-            const logEntryJSON = JSON.stringify(logEntry, null, 2); // O '2' indenta para facilitar a leitura
-
-            // Exibir o JSON no console para depuração/verificação
-            console.log("Novo Registro de Reflorestamento (JSON):");
+            const logEntryJSON = JSON.stringify(logEntry, null, 2);
+            console.log("Novo Registro de Reflorestamento (JSON individual):");
             console.log(logEntryJSON);
 
-            // Exibir mensagem de sucesso para o usuário
+            // Exibir mensagem de sucesso para ESTE registro
             showLogMessage(`Ação registrada com sucesso: ${quantity} árvore(s) da espécie ${species}.`, 'success');
 
-            // Limpar os campos do formulário para um novo registro
+            // Limpar o formulário
             logForm.reset();
+
+            // --- Envio para Backend (Exemplo Comentado) ---
+            /*
+            fetch('/api/log-reforestation', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: logEntryJSON })
+                .then(...)
+                .catch(...);
+            */
+            // --- Fim do Exemplo ---
 
         }); // Fim do event listener 'submit'
     } else {
-        console.error("Elemento #log-form não encontrado nesta página.");
+        console.error("Log Page: Elemento #log-form não encontrado.");
     }
 
 }); // Fim do DOMContentLoaded

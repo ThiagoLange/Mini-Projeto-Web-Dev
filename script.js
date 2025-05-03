@@ -1,5 +1,7 @@
+// Arquivo: script.js (Para a página de cadastro: index.html)
+
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Seletores e Funções Auxiliares ---
+    // --- Seletores de Elementos ---
     const form = document.getElementById('registration-form');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
@@ -7,80 +9,120 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageDiv = document.getElementById('message');
     const appContainer = document.getElementById('app-container');
 
-    // A função applyTheme ainda é necessária para a exibição temporária durante o submit
+    // --- Funções Auxiliares ---
+
+    /**
+     * Aplica a classe CSS de tema ao container principal.
+     * Usada para a exibição TEMPORÁRIA durante o submit.
+     * @param {string | null} themeName - O nome do tema ou null para remover.
+     */
     function applyTheme(themeName) {
         if (!appContainer) return;
         const themes = ['theme-pau-brasil', 'theme-castanheira', 'theme-peroba-rosa'];
-        appContainer.classList.remove(...themes);
+        appContainer.classList.remove(...themes); // Limpa temas anteriores
 
         if (themeName && themes.includes(`theme-${themeName}`)) {
             appContainer.classList.add(`theme-${themeName}`);
-            console.log(`Tema ${themeName} aplicado.`);
+            console.log(`Cadastro Page: Tema temporário '${themeName}' aplicado.`);
         } else {
-            console.log('Tema visual removido ou nome inválido.');
+            console.log('Cadastro Page: Tema visual removido ou nome inválido.');
         }
     }
 
-    // Funções showMessage e clearMessage (sem alterações)
+    /** Exibe mensagem de feedback */
     function showMessage(text, type = 'success') {
+        if (!messageDiv) return;
         messageDiv.textContent = text;
         messageDiv.className = '';
-        messageDiv.classList.add(`message-${type}`);
+        messageDiv.classList.add('message', `message-${type}`);
     }
+
+    /** Limpa a área de mensagens */
     function clearMessage() {
+        if (!messageDiv) return;
         messageDiv.textContent = '';
         messageDiv.className = '';
     }
 
     // --- Lógica Principal da Página de Cadastro ---
 
+    // 1. NÃO carregar tema salvo ao entrar na página de cadastro.
     console.log("Página de cadastro carregada com tema padrão.");
 
+    // 2. Configurar o listener para o envio do formulário de cadastro
+    if (form) {
+        form.addEventListener('submit', (event) => {
+            event.preventDefault(); // Impede o envio padrão
+            clearMessage(); // Limpa mensagens antigas
 
-    // 2. Adicionar listener para o envio do formulário (lógica interna permanece a mesma)
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        clearMessage();
+            // --- Validação ---
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value; // Lembrete: Inseguro em produção!
+            const selectedTreeRadio = document.querySelector('input[name="tree"]:checked');
 
-        // Validação...
-        const username = usernameInput.value.trim();
-        const password = passwordInput.value;
-        const selectedTreeRadio = document.querySelector('input[name="tree"]:checked');
+            if (!selectedTreeRadio) {
+                showMessage('Por favor, selecione uma árvore avatar.', 'error');
+                return;
+            }
+            const selectedTreeValue = selectedTreeRadio.value; // ex: 'pau-brasil'
 
-        if (!selectedTreeRadio) {
-            showMessage('Por favor, selecione uma árvore avatar.', 'error'); return;
-        }
-        const selectedTreeValue = selectedTreeRadio.value;
-        if (!username || !password) {
-            showMessage('Por favor, preencha o usuário e a senha.', 'error'); return;
-        }
+            if (!username || !password) {
+                showMessage('Por favor, preencha o usuário e a senha.', 'error');
+                return;
+            }
 
-        // Processamento do Sucesso...
-        const userData = { username, password, treeAvatar: selectedTreeValue };
-        const userDataJSON = JSON.stringify(userData, null, 2);
-        console.log("Objeto de Usuário (JSON):", userDataJSON);
+            // --- Processamento do Sucesso ---
 
-        // Salvar no localStorage (AINDA NECESSÁRIO para a próxima página)
-        try {
-            localStorage.setItem('userTheme', selectedTreeValue);
-            console.log(`Tema '${selectedTreeValue}' salvo no localStorage.`);
-        } catch (e) { console.error("Erro ao salvar no localStorage:", e); }
+            // Criar o objeto de usuário (para eventual envio ao backend)
+            const userData = {
+                username: username,
+                password: password, // Apenas para demonstração da estrutura JSON
+                treeAvatar: selectedTreeValue
+            };
+            const userDataJSON = JSON.stringify(userData, null, 2);
+            console.log("Objeto de Usuário (JSON):", userDataJSON);
 
-        // Aplicar tema TEMPORARIAMENTE
-        applyTheme(selectedTreeValue);
+            // 1. SALVAR dados essenciais no localStorage para outras páginas
+            try {
+                localStorage.setItem('userTheme', selectedTreeValue); // Salva a árvore/tema escolhido
+                localStorage.setItem('userName', username);         // Salva o nome do usuário
+                console.log(`Tema '${selectedTreeValue}' e usuário '${username}' salvos no localStorage.`);
+            } catch (e) {
+                console.error("Erro crítico ao salvar dados essenciais no localStorage:", e);
+                showMessage("Erro ao salvar preferências. Não foi possível continuar.", "error");
+                return;
+            }
 
-        // Exibir mensagem de sucesso
-        showMessage(`Cadastro de ${username} realizado! Redirecionando...`, 'success');
+            // 2. APLICAR O TEMA VISUALMENTE (de forma temporária)
+            applyTheme(selectedTreeValue);
 
-        // Limpar formulário
-        form.reset();
+            // 3. Exibir mensagem de sucesso e indicar redirecionamento para o PERFIL
+            showMessage(`Cadastro de ${username} realizado! Redirecionando para o seu perfil...`, 'success');
 
-        // Agendar reset visual e redirecionamento
-        const redirectDelay = 1500;
-        setTimeout(() => {
-            applyTheme(null); // Limpa tema visual ANTES de redirecionar
-            window.location.href = 'reflorestamento.html'; // Redireciona
-        }, redirectDelay);
-    });
+            // 4. Limpar o formulário (campos e seleção da árvore)
+            form.reset();
+
+            // 5. AGENDAR A REMOÇÃO DO TEMA VISUAL E O REDIRECIONAMENTO PARA O PERFIL
+            const redirectDelay = 1500; // Tempo em milissegundos
+            console.log(`Agendando reset visual e redirecionamento para profile.html em ${redirectDelay}ms`); // Mensagem do console atualizada
+
+            setTimeout(() => {
+                // 5a. Resetar o tema visual desta página para o padrão
+                applyTheme(null);
+                console.log('Tema visual da página de cadastro resetado.');
+
+                // 5b. Redirecionar para a página de PERFIL <<< ALTERADO AQUI >>>
+                window.location.href = 'profile.html';
+
+            }, redirectDelay);
+
+            // --- Envio para Backend (Exemplo Comentado) ---
+            /* fetch(...) */
+            // --- Fim do Exemplo ---
+
+        }); // Fim do event listener 'submit'
+    } else {
+        console.error("Elemento #registration-form não encontrado.");
+    }
 
 }); // Fim do DOMContentLoaded

@@ -4,18 +4,18 @@ body {
     margin: 0;
     padding: 20px;
     background-color: #f4f4f4;
-    transition: background-color 0.5s ease, color 0.5s ease; /* Suaviza a troca de tema */
+    transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 #app-container {
-    max-width: 500px;
+    max-width: 650px;
     margin: 40px auto;
     padding: 30px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-left: 8px solid #ccc; /* Borda padrão inicial */
-    transition: border-left-color 0.5s ease, background-color 0.5s ease; /* Suaviza a troca de tema */
+    border-left: 8px solid #ccc;
+    transition: border-left-color 0.5s ease, background-color 0.5s ease;
 }
 
 h1 {
@@ -25,7 +25,7 @@ h1 {
     transition: color 0.5s ease;
 }
 
-/* Formulário */
+/* Formulário Geral (Cadastro e Log) */
 .form-group {
     margin-bottom: 15px;
 }
@@ -38,15 +38,36 @@ h1 {
 }
 
 .form-group input[type="text"],
-.form-group input[type="password"] {
-    width: calc(100% - 20px); /* Ajusta para padding */
+.form-group input[type="password"],
+.form-group input[type="number"] {
+    width: calc(100% - 22px);
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1em;
+    box-sizing: border-box;
 }
 
-/* Seleção de Árvores */
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    background-color: #fff;
+    box-sizing: border-box;
+    height: 40px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007bff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px auto;
+    padding-right: 30px;
+}
+
+/* Seleção de Árvores (Cadastro) */
 .tree-selection {
     margin-top: 20px;
     margin-bottom: 25px;
@@ -55,166 +76,100 @@ h1 {
     border-radius: 4px;
 }
 
-.tree-selection p {
-    margin-top: 0;
-    font-weight: bold;
-    color: #555;
-}
+.tree-selection p { margin-top: 0; font-weight: bold; color: #555; }
+.tree-option { margin-bottom: 10px; display: flex; align-items: center; }
+.tree-option input[type="radio"] { margin-right: 10px; cursor: pointer; }
+.tree-option label { cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: normal; color: #333; }
+.tree-option img { vertical-align: middle; }
 
-.tree-option {
-    margin-bottom: 10px;
-    display: flex; /* Alinha input e label */
-    align-items: center; /* Centraliza verticalmente */
-}
-
-.tree-option input[type="radio"] {
-    margin-right: 10px;
-    cursor: pointer;
-}
-
-.tree-option label {
-    cursor: pointer;
-    display: flex; /* Para alinhar imagem e texto */
-    align-items: center;
-    gap: 8px; /* Espaço entre imagem e texto */
-    font-weight: normal; /* Sobrescreve o bold do form-group */
-    color: #333;
-}
-
-.tree-option img {
-    vertical-align: middle; /* Alinha a imagem com o texto */
-}
-
-
-/* Botão */
+/* Botão Geral de Submit (Cadastro e Log) */
 button[type="submit"] {
     display: block;
     width: 100%;
     padding: 12px;
-    background-color: #5cb85c; /* Verde padrão */
+    background-color: #5cb85c;
     color: white;
     border: none;
     border-radius: 4px;
     font-size: 1.1em;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-top: 10px;
 }
+button[type="submit"]:hover { background-color: #4cae4c; }
 
-button[type="submit"]:hover {
-    background-color: #4cae4c;
-}
+/* Mensagens (Cadastro e Log) */
+.message { margin-top: 20px; padding: 10px; border-radius: 4px; text-align: center; font-weight: bold; }
+.message-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.message-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
-/* Mensagens */
-#message {
-    margin-top: 20px;
-    padding: 10px;
-    border-radius: 4px;
-    text-align: center;
-    font-weight: bold;
-}
+/* Classe para esconder elementos */
+.hidden { display: none; }
 
-.message-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
+/* --- Estilos da Página de Perfil --- */
+.profile-content { display: flex; flex-wrap: wrap; gap: 30px; margin-top: 20px; padding: 20px; background-color: rgba(0, 0, 0, 0.03); border-radius: 5px; }
+.profile-avatar { flex: 1; min-width: 180px; text-align: center; }
+.profile-avatar img { display: block; margin: 0 auto 10px auto; max-width: 150px; height: auto; border-radius: 50%; border: 4px solid #ccc; background-color: #fff; transition: border-color 0.5s ease; }
+#avatar-stage-name { font-style: italic; color: #555; font-size: 0.9em; } /* Estilo para o nome do estágio */
+.profile-info { flex: 2; min-width: 250px; }
+.profile-content h2 { margin-top: 0; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 5px; color: #444; transition: border-color 0.5s ease, color 0.5s ease; }
+.profile-stats p { font-size: 1.1em; margin-bottom: 20px; }
+.profile-stats strong { font-size: 1.3em; color: #333; transition: color 0.5s ease; }
+.profile-bio #bio-text { min-height: 50px; background-color: #f9f9f9; padding: 10px; border-radius: 4px; border: 1px solid #eee; white-space: pre-wrap; margin-bottom: 10px; }
+#bio-edit-form textarea { width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; font-family: sans-serif; margin-bottom: 10px; }
 
-.message-error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
+/* Botões específicos do Perfil */
+.profile-button { padding: 8px 15px; background-color: #5bc0de; color: white; border: none; border-radius: 4px; font-size: 0.9em; cursor: pointer; transition: background-color 0.3s ease; margin-right: 5px; margin-bottom: 5px; }
+.profile-button:hover { background-color: #31b0d5; }
+.profile-button.secondary { background-color: #aaa; }
+.profile-button.secondary:hover { background-color: #888; }
 
-/* --- TEMAS --- */
+/* Espaçamento para a área de ações no perfil (botão Registrar Ação) */
+.profile-actions { margin-top: 15px; margin-bottom: 25px; text-align: center; }
 
+.profile-nav { text-align: center; margin-top: 30px; padding-top: 15px; border-top: 1px solid #eee; }
+.profile-nav a { color: #007bff; text-decoration: none; margin: 0 10px; }
+.profile-nav a:hover { text-decoration: underline; }
+
+/* --- TEMAS (Aplicados a todas as páginas via #app-container) --- */
 /* Tema Pau-Brasil (Vermelho) */
-#app-container.theme-pau-brasil {
-    border-left-color: #dc3545; /* Vermelho Bootstrap Danger */
-    background-color: #f8d7da; /* Fundo mais claro */
-}
-#app-container.theme-pau-brasil h1 {
-    color: #721c24; /* Cor de texto mais escura */
-}
-#app-container.theme-pau-brasil button[type="submit"] {
-    background-color: #dc3545;
-}
-#app-container.theme-pau-brasil button[type="submit"]:hover {
-    background-color: #c82333;
-}
-/* Você pode adicionar mais seletores aqui para estilizar outros elementos */
-#app-container.theme-pau-brasil .form-group label {
-     color: #721c24;
-}
-
+#app-container.theme-pau-brasil { border-left-color: #dc3545; background-color: #f8d7da; }
+#app-container.theme-pau-brasil h1 { color: #721c24; }
+#app-container.theme-pau-brasil .form-group label { color: #721c24; }
+#app-container.theme-pau-brasil button[type="submit"] { background-color: #dc3545; }
+#app-container.theme-pau-brasil button[type="submit"]:hover { background-color: #c82333; }
+#app-container.theme-pau-brasil .form-group select { border-color: #dc3545; }
+/* Perfil */
+#app-container.theme-pau-brasil .profile-avatar img { border-color: #dc3545; }
+#app-container.theme-pau-brasil .profile-content h2 { border-bottom-color: #dc3545; color: #721c24; }
+#app-container.theme-pau-brasil .profile-stats strong { color: #721c24; }
+#app-container.theme-pau-brasil .profile-button:not(.secondary) { background-color: #dc3545; }
+#app-container.theme-pau-brasil .profile-button:not(.secondary):hover { background-color: #c82333; }
 
 /* Tema Castanheira (Marrom) */
-#app-container.theme-castanheira {
-    border-left-color: #8B4513; /* SaddleBrown */
-    background-color: #f5e5d8; /* Fundo claro (tipo bege/pêssego) */
-}
-#app-container.theme-castanheira h1 {
-    color: #5D2B02; /* Marrom mais escuro */
-}
-#app-container.theme-castanheira button[type="submit"] {
-    background-color: #8B4513;
-}
-#app-container.theme-castanheira button[type="submit"]:hover {
-    background-color: #693510;
-}
-#app-container.theme-castanheira .form-group label {
-     color: #5D2B02;
-}
-
+#app-container.theme-castanheira { border-left-color: #8B4513; background-color: #f5e5d8; }
+#app-container.theme-castanheira h1 { color: #5D2B02; }
+#app-container.theme-castanheira .form-group label { color: #5D2B02; }
+#app-container.theme-castanheira button[type="submit"] { background-color: #8B4513; }
+#app-container.theme-castanheira button[type="submit"]:hover { background-color: #693510; }
+#app-container.theme-castanheira .form-group select { border-color: #8B4513; }
+/* Perfil */
+#app-container.theme-castanheira .profile-avatar img { border-color: #8B4513; }
+#app-container.theme-castanheira .profile-content h2 { border-bottom-color: #8B4513; color: #5D2B02; }
+#app-container.theme-castanheira .profile-stats strong { color: #5D2B02; }
+#app-container.theme-castanheira .profile-button:not(.secondary) { background-color: #8B4513; }
+#app-container.theme-castanheira .profile-button:not(.secondary):hover { background-color: #693510; }
 
 /* Tema Peroba-Rosa (Rosa) */
-#app-container.theme-peroba-rosa {
-    border-left-color: #E83E8C; /* Rosa Bootstrap Pink */
-    background-color: #f8ddee; /* Fundo rosa claro */
-}
-#app-container.theme-peroba-rosa h1 {
-    color: #a01d5f; /* Rosa mais escuro */
-}
-#app-container.theme-peroba-rosa button[type="submit"] {
-    background-color: #E83E8C;
-}
-#app-container.theme-peroba-rosa button[type="submit"]:hover {
-    background-color: #d42474;
-}
-#app-container.theme-peroba-rosa .form-group label {
-     color: #a01d5f;
-}
-
-/* Estilização básica para o select parecer com os inputs */
-.form-group select {
-    width: 100%; /* Ocupa toda a largura como os inputs */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1em;
-    background-color: #fff; /* Garante fundo branco */
-    box-sizing: border-box; /* Garante que padding não aumente a largura total */
-    height: 40px; /* Altura consistente com inputs, ajuste se necessário */
-}
-
-/* Estilização opcional para a seta do select (pode variar entre navegadores) */
-.form-group select {
-    appearance: none; /* Remove aparência padrão */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007bff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); /* Ícone de seta SVG */
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px auto;
-    padding-right: 30px; /* Espaço para a seta */
-}
-
-/* Ajuste de cor da borda do select nos temas (exemplo) */
-#app-container.theme-pau-brasil .form-group select {
-    border-color: #dc3545; /* Vermelho */
-}
-#app-container.theme-castanheira .form-group select {
-    border-color: #8B4513; /* Marrom */
-}
-#app-container.theme-peroba-rosa .form-group select {
-    border-color: #E83E8C; /* Rosa */
-}
+#app-container.theme-peroba-rosa { border-left-color: #E83E8C; background-color: #f8ddee; }
+#app-container.theme-peroba-rosa h1 { color: #a01d5f; }
+#app-container.theme-peroba-rosa .form-group label { color: #a01d5f; }
+#app-container.theme-peroba-rosa button[type="submit"] { background-color: #E83E8C; }
+#app-container.theme-peroba-rosa button[type="submit"]:hover { background-color: #d42474; }
+#app-container.theme-peroba-rosa .form-group select { border-color: #E83E8C; }
+/* Perfil */
+#app-container.theme-peroba-rosa .profile-avatar img { border-color: #E83E8C; }
+#app-container.theme-peroba-rosa .profile-content h2 { border-bottom-color: #E83E8C; color: #a01d5f; }
+#app-container.theme-peroba-rosa .profile-stats strong { color: #a01d5f; }
+#app-container.theme-peroba-rosa .profile-button:not(.secondary) { background-color: #E83E8C; }
+#app-container.theme-peroba-rosa .profile-button:not(.secondary):hover { background-color: #d42474; }
