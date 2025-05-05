@@ -40,12 +40,13 @@ h1 {
 .form-group input[type="text"],
 .form-group input[type="password"],
 .form-group input[type="number"] {
-    width: calc(100% - 22px);
+    width: calc(100% - 22px); /* Considera padding e border */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1em;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Inclui padding e border na largura */
+    height: 40px; /* Altura consistente */
 }
 
 .form-group select {
@@ -56,7 +57,7 @@ h1 {
     font-size: 1em;
     background-color: #fff;
     box-sizing: border-box;
-    height: 40px;
+    height: 40px; /* Altura consistente */
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -64,7 +65,7 @@ h1 {
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 12px auto;
-    padding-right: 30px;
+    padding-right: 30px; /* Espaço para a seta */
 }
 
 /* Seleção de Árvores (Cadastro) */
@@ -95,6 +96,8 @@ button[type="submit"] {
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-top: 10px;
+    height: 44px; /* Altura um pouco maior para botões principais */
+    box-sizing: border-box;
 }
 button[type="submit"]:hover { background-color: #4cae4c; }
 
@@ -110,7 +113,13 @@ button[type="submit"]:hover { background-color: #4cae4c; }
 .profile-content { display: flex; flex-wrap: wrap; gap: 30px; margin-top: 20px; padding: 20px; background-color: rgba(0, 0, 0, 0.03); border-radius: 5px; }
 .profile-avatar { flex: 1; min-width: 180px; text-align: center; }
 .profile-avatar img { display: block; margin: 0 auto 10px auto; max-width: 150px; height: auto; border-radius: 50%; border: 4px solid #ccc; background-color: #fff; transition: border-color 0.5s ease; }
-/* #avatar-stage-name { font-style: italic; color: #555; font-size: 0.9em; } */ /* Estilo antigo ou removido - agora usando .stage-name */
+.stage-name { /* Estilo para o texto do estágio */
+    font-style: italic;
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 5px;
+    font-weight: bold;
+}
 .profile-info { flex: 2; min-width: 250px; }
 .profile-content h2 { margin-top: 0; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 5px; color: #444; transition: border-color 0.5s ease, color 0.5s ease; }
 .profile-stats p { font-size: 1.1em; margin-bottom: 20px; }
@@ -124,12 +133,39 @@ button[type="submit"]:hover { background-color: #4cae4c; }
 .profile-button.secondary { background-color: #aaa; }
 .profile-button.secondary:hover { background-color: #888; }
 
-/* Espaçamento para a área de ações no perfil (botão Registrar Ação) */
+/* Espaçamento para a área de ações no perfil */
 .profile-actions { margin-top: 15px; margin-bottom: 25px; text-align: center; }
 
 .profile-nav { text-align: center; margin-top: 30px; padding-top: 15px; border-top: 1px solid #eee; }
 .profile-nav a { color: #007bff; text-decoration: none; margin: 0 10px; }
 .profile-nav a:hover { text-decoration: underline; }
+
+/* Lista de Espécies */
+.species-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+}
+.species-list li {
+    margin-bottom: 5px;
+    font-size: 0.95em;
+    color: #333;
+}
+.species-list strong {
+    font-weight: bold;
+    margin-left: 5px;
+}
+.profile-stats hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 15px 0;
+}
+.profile-stats h4 {
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 1em;
+}
+
 
 /* --- TEMAS (Aplicados a todas as páginas via #app-container) --- */
 /* Tema Pau-Brasil (Vermelho) */
@@ -145,7 +181,7 @@ button[type="submit"]:hover { background-color: #4cae4c; }
 #app-container.theme-pau-brasil .profile-stats strong { color: #721c24; }
 #app-container.theme-pau-brasil .profile-button:not(.secondary) { background-color: #dc3545; }
 #app-container.theme-pau-brasil .profile-button:not(.secondary):hover { background-color: #c82333; }
-/* #app-container.theme-pau-brasil .stage-name { color: #721c24; } */ /* Adicionado Estilo Tema Estágio */
+#app-container.theme-pau-brasil .stage-name { color: #721c24; }
 
 /* Tema Castanheira (Marrom) */
 #app-container.theme-castanheira { border-left-color: #8B4513; background-color: #f5e5d8; }
@@ -160,7 +196,7 @@ button[type="submit"]:hover { background-color: #4cae4c; }
 #app-container.theme-castanheira .profile-stats strong { color: #5D2B02; }
 #app-container.theme-castanheira .profile-button:not(.secondary) { background-color: #8B4513; }
 #app-container.theme-castanheira .profile-button:not(.secondary):hover { background-color: #693510; }
-/* #app-container.theme-castanheira .stage-name { color: #5D2B02; } */ /* Adicionado Estilo Tema Estágio */
+#app-container.theme-castanheira .stage-name { color: #5D2B02; }
 
 /* Tema Peroba-Rosa (Rosa) */
 #app-container.theme-peroba-rosa { border-left-color: #E83E8C; background-color: #f8ddee; }
@@ -175,114 +211,10 @@ button[type="submit"]:hover { background-color: #4cae4c; }
 #app-container.theme-peroba-rosa .profile-stats strong { color: #a01d5f; }
 #app-container.theme-peroba-rosa .profile-button:not(.secondary) { background-color: #E83E8C; }
 #app-container.theme-peroba-rosa .profile-button:not(.secondary):hover { background-color: #d42474; }
-/* #app-container.theme-peroba-rosa .stage-name { color: #a01d5f; } */ /* Adicionado Estilo Tema Estágio */
-
-.species-list {
-    list-style: none; /* Remove marcadores padrão da lista */
-    padding-left: 0; /* Remove padding padrão da lista */
-    margin-top: 10px;
-}
-
-.species-list li {
-    margin-bottom: 5px; /* Espaçamento entre itens */
-    font-size: 0.95em;
-    color: #333;
-}
-
-.species-list strong {
-    font-weight: bold;
-    margin-left: 5px; /* Espaço antes do número */
-    /* A cor pode herdar do tema via .profile-stats strong ou definir aqui */
-}
-
-.profile-stats hr {
-    border: none;
-    border-top: 1px solid #eee;
-    margin: 15px 0;
-}
-
-.profile-stats h4 {
-    margin-bottom: 10px;
-    color: #555;
-    font-size: 1em;
-}
-
-/* --- CSS Adicionado para o Estágio do Avatar --- */
-.stage-name { /* Ou use #avatar-stage-name se você não adicionou a classe no HTML */
-    font-style: italic;
-    font-size: 0.9em; /* Tamanho de fonte ligeiramente menor */
-    color: #555; /* Cor cinza */
-    margin-top: 5px; /* Espaço acima do texto do estágio */
-    font-weight: bold; /* Texto em negrito */
-}
-
-/* Estilos de cor do estágio baseados no tema (opcional) */
-#app-container.theme-pau-brasil .stage-name { color: #721c24; }
-#app-container.theme-castanheira .stage-name { color: #5D2B02; }
 #app-container.theme-peroba-rosa .stage-name { color: #a01d5f; }
-/* --- Fim do CSS Adicionado --- */
 
-/* --- Estilos Adicionados para a Página de Relatório (report.html) --- */
-
-#report-results table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-#report-results th,
-#report-results td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-#report-results th {
-    background-color: #f2f2f2;
-}
-
-#chart-container {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
-}
-
-/* Ajustes no layout do formulário de busca do relatório */
-#report-search-form {
-    margin-bottom: 25px; /* Adiciona espaço abaixo do formulário */
-    padding-bottom: 20px; /* Adiciona espaço interno abaixo */
-    border-bottom: 1px solid #eee; /* Linha separadora opcional */
-    display: flex; /* Usar flexbox para alinhar melhor */
-    flex-wrap: wrap; /* Permitir quebra de linha */
-    gap: 15px; /* Espaço entre os elementos */
-    align-items: flex-end; /* Alinha itens na base */
-}
-
-#report-search-form .form-group {
-    /* display: inline-block; */ /* Removido - Flexbox cuida disso */
-    /* margin-right: 15px; */ /* Removido - Gap cuida disso */
-    /* vertical-align: bottom; */ /* Removido - align-items cuida disso */
-    margin-bottom: 0; /* Remove margem padrão do form-group se necessário */
-    flex-grow: 1; /* Permite que os inputs cresçam */
-}
-#report-search-form .form-group label {
-    margin-bottom: 3px; /* Pequeno ajuste na label */
-}
-
-#report-search-form button {
-    /* display: inline-block; */ /* Removido */
-    width: auto; /* Largura automática */
-    padding: 10px 15px;
-    /* vertical-align: bottom; */ /* Removido */
-    height: 40px; /* Alinha altura com inputs/selects (ajuste conforme necessário) */
-    flex-shrink: 0; /* Evita que o botão encolha */
-    cursor: pointer; /* Muda o cursor no botão */
-}
-
-/* --- Fim dos Estilos da Página de Relatório --- */
 
 /* --- Estilos Adicionados para a Página de Destaques (highlights.html) --- */
-
 #highlights-container {
     display: flex;
     justify-content: space-around; /* Espaça os itens uniformemente */
@@ -291,7 +223,6 @@ button[type="submit"]:hover { background-color: #4cae4c; }
     margin-top: 30px;
     gap: 20px; /* Espaço entre os blocos */
 }
-
 .user-highlight-block {
     text-align: center;
     padding: 15px;
@@ -302,7 +233,6 @@ button[type="submit"]:hover { background-color: #4cae4c; }
     min-width: 150px; /* Largura mínima */
     box-sizing: border-box;
 }
-
 .user-highlight-block img {
     display: block;
     width: 100px; /* Tamanho do avatar */
@@ -314,17 +244,141 @@ button[type="submit"]:hover { background-color: #4cae4c; }
     background-color: #fff;
     transition: border-color 0.5s ease; /* Transição da cor da borda do tema */
 }
-
 .user-highlight-block p {
     font-weight: bold;
     margin-top: 5px;
     color: #333;
     word-wrap: break-word; /* Quebra nomes longos */
 }
-
  /* Estilos de borda do avatar de destaque baseados no tema (igual ao profile) */
 #app-container.theme-pau-brasil .user-highlight-block img { border-color: #dc3545; }
 #app-container.theme-castanheira .user-highlight-block img { border-color: #8B4513; }
 #app-container.theme-peroba-rosa .user-highlight-block img { border-color: #E83E8C; }
-
 /* --- Fim dos Estilos da Página de Destaques --- */
+
+
+/* --- Estilos Adicionados para a Página de Relatório (report.html) --- */
+#report-results table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+#report-results th,
+#report-results td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+#report-results th {
+    background-color: #f2f2f2;
+}
+#chart-container {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+/* Ajustes no layout do formulário de busca do relatório */
+#report-search-form {
+    margin-bottom: 25px; /* Adiciona espaço abaixo do formulário */
+    padding-bottom: 20px; /* Adiciona espaço interno abaixo */
+    border-bottom: 1px solid #eee; /* Linha separadora opcional */
+    display: flex; /* Usar flexbox para alinhar melhor */
+    flex-wrap: wrap; /* Permitir quebra de linha */
+    gap: 15px; /* Espaço entre os elementos */
+    align-items: flex-end; /* Alinha itens na base */
+}
+#report-search-form .form-group {
+    margin-bottom: 0; /* Remove margem padrão do form-group */
+    flex-grow: 1; /* Permite que os inputs cresçam */
+}
+#report-search-form .form-group label {
+    margin-bottom: 3px; /* Pequeno ajuste na label */
+}
+#report-search-form button {
+    width: auto; /* Largura automática */
+    padding: 10px 15px;
+    height: 40px; /* Alinha altura com inputs/selects */
+    flex-shrink: 0; /* Evita que o botão encolha */
+    cursor: pointer; /* Muda o cursor no botão */
+    /* Reusa o estilo de botão padrão, mas sobrescreve o width e display */
+    margin-top: 0; /* Remove margem superior padrão de button[type=submit] */
+    font-size: 1em; /* Ajusta fonte se necessário */
+}
+/* --- Fim dos Estilos da Página de Relatório --- */
+
+
+/* --- Estilos do Menu de Navegação Principal --- */
+.main-nav {
+    background-color: #f8f9fa; /* Um fundo bem leve */
+    padding: 8px 0; /* Padding vertical */
+    margin-bottom: 30px; /* Espaço abaixo do menu, antes do título H1 */
+    border-radius: 5px;
+    border: 1px solid #dee2e6; /* Borda sutil */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Sombra muito leve */
+}
+.main-nav ul {
+    list-style: none; /* Remove bolinhas da lista */
+    padding: 0 15px; /* Padding lateral dentro do menu */
+    margin: 0;
+    display: flex; /* Coloca itens lado a lado */
+    justify-content: center; /* Centraliza os itens horizontalmente */
+    flex-wrap: wrap; /* Permite quebrar linha em telas menores */
+    gap: 10px 20px; /* Espaço vertical e horizontal entre os links */
+}
+.main-nav li {
+    /* O flex/gap no UL já cuida do espaçamento */
+}
+.main-nav a {
+    text-decoration: none; /* Remove sublinhado */
+    color: #495057; /* Cor de link mais escura */
+    font-weight: 500; /* Peso da fonte */
+    padding: 6px 12px; /* Padding para área clicável */
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    display: inline-block; /* Necessário para padding funcionar corretamente */
+}
+.main-nav a:hover,
+.main-nav a:focus { /* Efeito ao passar o mouse ou focar */
+    background-color: #e9ecef; /* Fundo leve no hover */
+    color: #000; /* Texto mais escuro no hover */
+    outline: none; /* Remove outline padrão do foco, se desejado */
+}
+/* Ajustes de Cor do Link Baseado no Tema (Opcional, mas recomendado) */
+#app-container.theme-pau-brasil .main-nav { background-color: #f8d7da; border-color: #f5c6cb; }
+#app-container.theme-pau-brasil .main-nav a { color: #721c24; }
+#app-container.theme-pau-brasil .main-nav a:hover,
+#app-container.theme-pau-brasil .main-nav a:focus { background-color: #f5c6cb; color: #491217; }
+#app-container.theme-castanheira .main-nav { background-color: #f5e5d8; border-color: #e9d8c7; }
+#app-container.theme-castanheira .main-nav a { color: #5D2B02; }
+#app-container.theme-castanheira .main-nav a:hover,
+#app-container.theme-castanheira .main-nav a:focus { background-color: #e9d8c7; color: #3b1c01; }
+#app-container.theme-peroba-rosa .main-nav { background-color: #f8ddee; border-color: #f5c6e3; }
+#app-container.theme-peroba-rosa .main-nav a { color: #a01d5f; }
+#app-container.theme-peroba-rosa .main-nav a:hover,
+#app-container.theme-peroba-rosa .main-nav a:focus { background-color: #f5c6e3; color: #6f1443; }
+/* --- Fim dos Estilos do Menu --- */
+
+/* --- Estilos Adicionados para Logout --- */
+
+/* Estilo opcional para a seção do botão de logout */
+.profile-logout-section {
+    text-align: center; /* Centraliza o botão */
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px dashed #ccc; /* Linha separadora pontilhada */
+}
+
+/* Estilo específico para o botão de logout (vermelho) */
+/* Reutiliza a classe base .profile-button e adiciona a classe .danger */
+.profile-button.danger {
+    background-color: #d9534f; /* Cor vermelha (similar ao Bootstrap 'danger') */
+    color: white;
+    border-color: #d43f3a; /* Borda um pouco mais escura */
+}
+
+.profile-button.danger:hover {
+    background-color: #c9302c; /* Vermelho mais escuro no hover */
+    border-color: #ac2925;
+}
+
+/* --- Fim dos Estilos de Logout --- */
