@@ -8,15 +8,22 @@ body {
 }
 
 #app-container {
-    max-width: 650px;
-    margin: 40px auto;
+    max-width: 95%; /* Largura padrão (larga) */
+    margin: 40px auto; /* Mantém centralizado */
     padding: 30px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     border-left: 8px solid #ccc;
     transition: border-left-color 0.5s ease, background-color 0.5s ease;
+    box-sizing: border-box; /* Garante que padding não aumente a largura total além de 95% */
 }
+
+/* Regra específica para sobrescrever a largura APENAS na página de cadastro */
+body.page-cadastro #app-container {
+    max-width: 650px; /* Largura original/estreita para o cadastro */
+}
+
 
 h1 {
     text-align: center;
@@ -25,30 +32,78 @@ h1 {
     transition: color 0.5s ease;
 }
 
+/* --- Estilos do Menu de Navegação Principal --- */
+/* (Colocado aqui para melhor organização, após estilos gerais do container) */
+.main-nav {
+    background-color: #f8f9fa; /* Um fundo bem leve */
+    padding: 8px 0; /* Padding vertical */
+    margin-bottom: 30px; /* Espaço abaixo do menu, antes do título H1 */
+    border-radius: 5px;
+    border: 1px solid #dee2e6; /* Borda sutil */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Sombra muito leve */
+}
+.main-nav ul {
+    list-style: none; /* Remove bolinhas da lista */
+    padding: 0 15px; /* Padding lateral dentro do menu */
+    margin: 0;
+    display: flex; /* Coloca itens lado a lado */
+    justify-content: center; /* Centraliza os itens horizontalmente */
+    flex-wrap: wrap; /* Permite quebrar linha em telas menores */
+    gap: 10px 20px; /* Espaço vertical e horizontal entre os links */
+}
+.main-nav li { } /* O flex/gap no UL já cuida do espaçamento */
+.main-nav a {
+    text-decoration: none; /* Remove sublinhado */
+    color: #495057; /* Cor de link mais escura */
+    font-weight: 500; /* Peso da fonte */
+    padding: 6px 12px; /* Padding para área clicável */
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    display: inline-block; /* Necessário para padding funcionar corretamente */
+}
+.main-nav a:hover,
+.main-nav a:focus { /* Efeito ao passar o mouse ou focar */
+    background-color: #e9ecef; /* Fundo leve no hover */
+    color: #000; /* Texto mais escuro no hover */
+    outline: none; /* Remove outline padrão do foco, se desejado */
+}
+/* Ajustes de Cor do Link Baseado no Tema */
+#app-container.theme-pau-brasil .main-nav { background-color: #f8d7da; border-color: #f5c6cb; }
+#app-container.theme-pau-brasil .main-nav a { color: #721c24; }
+#app-container.theme-pau-brasil .main-nav a:hover,
+#app-container.theme-pau-brasil .main-nav a:focus { background-color: #f5c6cb; color: #491217; }
+#app-container.theme-castanheira .main-nav { background-color: #f5e5d8; border-color: #e9d8c7; }
+#app-container.theme-castanheira .main-nav a { color: #5D2B02; }
+#app-container.theme-castanheira .main-nav a:hover,
+#app-container.theme-castanheira .main-nav a:focus { background-color: #e9d8c7; color: #3b1c01; }
+#app-container.theme-peroba-rosa .main-nav { background-color: #f8ddee; border-color: #f5c6e3; }
+#app-container.theme-peroba-rosa .main-nav a { color: #a01d5f; }
+#app-container.theme-peroba-rosa .main-nav a:hover,
+#app-container.theme-peroba-rosa .main-nav a:focus { background-color: #f5c6e3; color: #6f1443; }
+/* --- Fim dos Estilos do Menu --- */
+
+
 /* Formulário Geral (Cadastro e Log) */
 .form-group {
     margin-bottom: 15px;
 }
-
 .form-group label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
     color: #555;
 }
-
 .form-group input[type="text"],
 .form-group input[type="password"],
 .form-group input[type="number"] {
-    width: calc(100% - 22px); /* Considera padding e border */
+    width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1em;
-    box-sizing: border-box; /* Inclui padding e border na largura */
-    height: 40px; /* Altura consistente */
+    box-sizing: border-box;
+    height: 40px;
 }
-
 .form-group select {
     width: 100%;
     padding: 10px;
@@ -57,7 +112,7 @@ h1 {
     font-size: 1em;
     background-color: #fff;
     box-sizing: border-box;
-    height: 40px; /* Altura consistente */
+    height: 40px;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -65,7 +120,7 @@ h1 {
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 12px auto;
-    padding-right: 30px; /* Espaço para a seta */
+    padding-right: 30px;
 }
 
 /* Seleção de Árvores (Cadastro) */
@@ -76,7 +131,6 @@ h1 {
     padding: 15px;
     border-radius: 4px;
 }
-
 .tree-selection p { margin-top: 0; font-weight: bold; color: #555; }
 .tree-option { margin-bottom: 10px; display: flex; align-items: center; }
 .tree-option input[type="radio"] { margin-right: 10px; cursor: pointer; }
@@ -96,7 +150,7 @@ button[type="submit"] {
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-top: 10px;
-    height: 44px; /* Altura um pouco maior para botões principais */
+    height: 44px;
     box-sizing: border-box;
 }
 button[type="submit"]:hover { background-color: #4cae4c; }
@@ -113,144 +167,77 @@ button[type="submit"]:hover { background-color: #4cae4c; }
 .profile-content { display: flex; flex-wrap: wrap; gap: 30px; margin-top: 20px; padding: 20px; background-color: rgba(0, 0, 0, 0.03); border-radius: 5px; }
 .profile-avatar { flex: 1; min-width: 180px; text-align: center; }
 .profile-avatar img { display: block; margin: 0 auto 10px auto; max-width: 150px; height: auto; border-radius: 50%; border: 4px solid #ccc; background-color: #fff; transition: border-color 0.5s ease; }
-.stage-name { /* Estilo para o texto do estágio */
-    font-style: italic;
-    font-size: 0.9em;
-    color: #555;
-    margin-top: 5px;
-    font-weight: bold;
-}
+.stage-name { font-style: italic; font-size: 0.9em; color: #555; margin-top: 5px; font-weight: bold; }
 .profile-info { flex: 2; min-width: 250px; }
 .profile-content h2 { margin-top: 0; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 5px; color: #444; transition: border-color 0.5s ease, color 0.5s ease; }
 .profile-stats p { font-size: 1.1em; margin-bottom: 20px; }
 .profile-stats strong { font-size: 1.3em; color: #333; transition: color 0.5s ease; }
 .profile-bio #bio-text { min-height: 50px; background-color: #f9f9f9; padding: 10px; border-radius: 4px; border: 1px solid #eee; white-space: pre-wrap; margin-bottom: 10px; }
 #bio-edit-form textarea { width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; font-family: sans-serif; margin-bottom: 10px; }
-
-/* Botões específicos do Perfil */
 .profile-button { padding: 8px 15px; background-color: #5bc0de; color: white; border: none; border-radius: 4px; font-size: 0.9em; cursor: pointer; transition: background-color 0.3s ease; margin-right: 5px; margin-bottom: 5px; }
 .profile-button:hover { background-color: #31b0d5; }
 .profile-button.secondary { background-color: #aaa; }
 .profile-button.secondary:hover { background-color: #888; }
-
-/* Espaçamento para a área de ações no perfil */
 .profile-actions { margin-top: 15px; margin-bottom: 25px; text-align: center; }
-
 .profile-nav { text-align: center; margin-top: 30px; padding-top: 15px; border-top: 1px solid #eee; }
 .profile-nav a { color: #007bff; text-decoration: none; margin: 0 10px; }
 .profile-nav a:hover { text-decoration: underline; }
-
-/* Lista de Espécies */
-.species-list {
-    list-style: none;
-    padding-left: 0;
-    margin-top: 10px;
-}
-.species-list li {
-    margin-bottom: 5px;
-    font-size: 0.95em;
-    color: #333;
-}
-.species-list strong {
-    font-weight: bold;
-    margin-left: 5px;
-}
-.profile-stats hr {
-    border: none;
-    border-top: 1px solid #eee;
-    margin: 15px 0;
-}
-.profile-stats h4 {
-    margin-bottom: 10px;
-    color: #555;
-    font-size: 1em;
-}
+.species-list { list-style: none; padding-left: 0; margin-top: 10px; }
+.species-list li { margin-bottom: 5px; font-size: 0.95em; color: #333; }
+.species-list strong { font-weight: bold; margin-left: 5px; }
+.profile-stats hr { border: none; border-top: 1px solid #eee; margin: 15px 0; }
+.profile-stats h4 { margin-bottom: 10px; color: #555; font-size: 1em; }
 
 
-/* --- TEMAS (Aplicados a todas as páginas via #app-container) --- */
-/* Tema Pau-Brasil (Vermelho) */
+/* --- TEMAS --- */
+/* Tema Pau-Brasil */
 #app-container.theme-pau-brasil { border-left-color: #dc3545; background-color: #f8d7da; }
 #app-container.theme-pau-brasil h1 { color: #721c24; }
 #app-container.theme-pau-brasil .form-group label { color: #721c24; }
 #app-container.theme-pau-brasil button[type="submit"] { background-color: #dc3545; }
 #app-container.theme-pau-brasil button[type="submit"]:hover { background-color: #c82333; }
 #app-container.theme-pau-brasil .form-group select { border-color: #dc3545; }
-/* Perfil */
 #app-container.theme-pau-brasil .profile-avatar img { border-color: #dc3545; }
 #app-container.theme-pau-brasil .profile-content h2 { border-bottom-color: #dc3545; color: #721c24; }
 #app-container.theme-pau-brasil .profile-stats strong { color: #721c24; }
-#app-container.theme-pau-brasil .profile-button:not(.secondary) { background-color: #dc3545; }
-#app-container.theme-pau-brasil .profile-button:not(.secondary):hover { background-color: #c82333; }
+#app-container.theme-pau-brasil .profile-button:not(.secondary):not(.danger) { background-color: #dc3545; }
+#app-container.theme-pau-brasil .profile-button:not(.secondary):not(.danger):hover { background-color: #c82333; }
 #app-container.theme-pau-brasil .stage-name { color: #721c24; }
 
-/* Tema Castanheira (Marrom) */
+/* Tema Castanheira */
 #app-container.theme-castanheira { border-left-color: #8B4513; background-color: #f5e5d8; }
 #app-container.theme-castanheira h1 { color: #5D2B02; }
 #app-container.theme-castanheira .form-group label { color: #5D2B02; }
 #app-container.theme-castanheira button[type="submit"] { background-color: #8B4513; }
 #app-container.theme-castanheira button[type="submit"]:hover { background-color: #693510; }
 #app-container.theme-castanheira .form-group select { border-color: #8B4513; }
-/* Perfil */
 #app-container.theme-castanheira .profile-avatar img { border-color: #8B4513; }
 #app-container.theme-castanheira .profile-content h2 { border-bottom-color: #8B4513; color: #5D2B02; }
 #app-container.theme-castanheira .profile-stats strong { color: #5D2B02; }
-#app-container.theme-castanheira .profile-button:not(.secondary) { background-color: #8B4513; }
-#app-container.theme-castanheira .profile-button:not(.secondary):hover { background-color: #693510; }
+#app-container.theme-castanheira .profile-button:not(.secondary):not(.danger) { background-color: #8B4513; }
+#app-container.theme-castanheira .profile-button:not(.secondary):not(.danger):hover { background-color: #693510; }
 #app-container.theme-castanheira .stage-name { color: #5D2B02; }
 
-/* Tema Peroba-Rosa (Rosa) */
+/* Tema Peroba-Rosa */
 #app-container.theme-peroba-rosa { border-left-color: #E83E8C; background-color: #f8ddee; }
 #app-container.theme-peroba-rosa h1 { color: #a01d5f; }
 #app-container.theme-peroba-rosa .form-group label { color: #a01d5f; }
 #app-container.theme-peroba-rosa button[type="submit"] { background-color: #E83E8C; }
 #app-container.theme-peroba-rosa button[type="submit"]:hover { background-color: #d42474; }
 #app-container.theme-peroba-rosa .form-group select { border-color: #E83E8C; }
-/* Perfil */
 #app-container.theme-peroba-rosa .profile-avatar img { border-color: #E83E8C; }
 #app-container.theme-peroba-rosa .profile-content h2 { border-bottom-color: #E83E8C; color: #a01d5f; }
 #app-container.theme-peroba-rosa .profile-stats strong { color: #a01d5f; }
-#app-container.theme-peroba-rosa .profile-button:not(.secondary) { background-color: #E83E8C; }
-#app-container.theme-peroba-rosa .profile-button:not(.secondary):hover { background-color: #d42474; }
+#app-container.theme-peroba-rosa .profile-button:not(.secondary):not(.danger) { background-color: #E83E8C; }
+#app-container.theme-peroba-rosa .profile-button:not(.secondary):not(.danger):hover { background-color: #d42474; }
 #app-container.theme-peroba-rosa .stage-name { color: #a01d5f; }
 
 
 /* --- Estilos Adicionados para a Página de Destaques (highlights.html) --- */
-#highlights-container {
-    display: flex;
-    justify-content: space-around; /* Espaça os itens uniformemente */
-    align-items: flex-start; /* Alinha itens no topo */
-    flex-wrap: wrap; /* Permite quebrar linha se não couber */
-    margin-top: 30px;
-    gap: 20px; /* Espaço entre os blocos */
-}
-.user-highlight-block {
-    text-align: center;
-    padding: 15px;
-    border-radius: 8px;
-    background-color: rgba(0,0,0,0.02); /* Fundo leve */
-    border: 1px solid #eee;
-    flex-basis: calc(33.333% - 20px); /* Tenta colocar 3 por linha, ajustando pelo gap */
-    min-width: 150px; /* Largura mínima */
-    box-sizing: border-box;
-}
-.user-highlight-block img {
-    display: block;
-    width: 100px; /* Tamanho do avatar */
-    height: 100px;
-    border-radius: 50%; /* Avatar circular */
-    object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
-    margin: 0 auto 10px auto; /* Centraliza e adiciona espaço abaixo */
-    border: 4px solid #ccc; /* Borda padrão */
-    background-color: #fff;
-    transition: border-color 0.5s ease; /* Transição da cor da borda do tema */
-}
-.user-highlight-block p {
-    font-weight: bold;
-    margin-top: 5px;
-    color: #333;
-    word-wrap: break-word; /* Quebra nomes longos */
-}
- /* Estilos de borda do avatar de destaque baseados no tema (igual ao profile) */
+#highlights-container { display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap; margin-top: 30px; gap: 20px; }
+.user-highlight-block { text-align: center; padding: 15px; border-radius: 8px; background-color: rgba(0,0,0,0.02); border: 1px solid #eee; flex-basis: calc(33.333% - 20px); min-width: 150px; box-sizing: border-box; }
+.user-highlight-block img { display: block; width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px auto; border: 4px solid #ccc; background-color: #fff; transition: border-color 0.5s ease; }
+.user-highlight-block p { font-weight: bold; margin-top: 5px; color: #333; word-wrap: break-word; }
 #app-container.theme-pau-brasil .user-highlight-block img { border-color: #dc3545; }
 #app-container.theme-castanheira .user-highlight-block img { border-color: #8B4513; }
 #app-container.theme-peroba-rosa .user-highlight-block img { border-color: #E83E8C; }
@@ -258,127 +245,20 @@ button[type="submit"]:hover { background-color: #4cae4c; }
 
 
 /* --- Estilos Adicionados para a Página de Relatório (report.html) --- */
-#report-results table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-#report-results th,
-#report-results td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-#report-results th {
-    background-color: #f2f2f2;
-}
-#chart-container {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
-}
-/* Ajustes no layout do formulário de busca do relatório */
-#report-search-form {
-    margin-bottom: 25px; /* Adiciona espaço abaixo do formulário */
-    padding-bottom: 20px; /* Adiciona espaço interno abaixo */
-    border-bottom: 1px solid #eee; /* Linha separadora opcional */
-    display: flex; /* Usar flexbox para alinhar melhor */
-    flex-wrap: wrap; /* Permitir quebra de linha */
-    gap: 15px; /* Espaço entre os elementos */
-    align-items: flex-end; /* Alinha itens na base */
-}
-#report-search-form .form-group {
-    margin-bottom: 0; /* Remove margem padrão do form-group */
-    flex-grow: 1; /* Permite que os inputs cresçam */
-}
-#report-search-form .form-group label {
-    margin-bottom: 3px; /* Pequeno ajuste na label */
-}
-#report-search-form button {
-    width: auto; /* Largura automática */
-    padding: 10px 15px;
-    height: 40px; /* Alinha altura com inputs/selects */
-    flex-shrink: 0; /* Evita que o botão encolha */
-    cursor: pointer; /* Muda o cursor no botão */
-    /* Reusa o estilo de botão padrão, mas sobrescreve o width e display */
-    margin-top: 0; /* Remove margem superior padrão de button[type=submit] */
-    font-size: 1em; /* Ajusta fonte se necessário */
-}
+#report-results table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; word-wrap: break-word; }
+#report-results th, #report-results td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+#report-results th { background-color: #f2f2f2; }
+#chart-container { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+#report-search-form { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #eee; display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; }
+#report-search-form .form-group { margin-bottom: 0; flex-grow: 1; min-width: 150px; }
+#report-search-form .form-group label { margin-bottom: 3px; }
+#report-search-form button { width: auto; padding: 10px 15px; height: 40px; flex-shrink: 0; cursor: pointer; margin-top: 0; font-size: 1em; background-color: #5bc0de; border: none; color: white; }
+#report-search-form button:hover { background-color: #31b0d5; }
 /* --- Fim dos Estilos da Página de Relatório --- */
 
 
-/* --- Estilos do Menu de Navegação Principal --- */
-.main-nav {
-    background-color: #f8f9fa; /* Um fundo bem leve */
-    padding: 8px 0; /* Padding vertical */
-    margin-bottom: 30px; /* Espaço abaixo do menu, antes do título H1 */
-    border-radius: 5px;
-    border: 1px solid #dee2e6; /* Borda sutil */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Sombra muito leve */
-}
-.main-nav ul {
-    list-style: none; /* Remove bolinhas da lista */
-    padding: 0 15px; /* Padding lateral dentro do menu */
-    margin: 0;
-    display: flex; /* Coloca itens lado a lado */
-    justify-content: center; /* Centraliza os itens horizontalmente */
-    flex-wrap: wrap; /* Permite quebrar linha em telas menores */
-    gap: 10px 20px; /* Espaço vertical e horizontal entre os links */
-}
-.main-nav li {
-    /* O flex/gap no UL já cuida do espaçamento */
-}
-.main-nav a {
-    text-decoration: none; /* Remove sublinhado */
-    color: #495057; /* Cor de link mais escura */
-    font-weight: 500; /* Peso da fonte */
-    padding: 6px 12px; /* Padding para área clicável */
-    border-radius: 4px;
-    transition: background-color 0.2s ease, color 0.2s ease;
-    display: inline-block; /* Necessário para padding funcionar corretamente */
-}
-.main-nav a:hover,
-.main-nav a:focus { /* Efeito ao passar o mouse ou focar */
-    background-color: #e9ecef; /* Fundo leve no hover */
-    color: #000; /* Texto mais escuro no hover */
-    outline: none; /* Remove outline padrão do foco, se desejado */
-}
-/* Ajustes de Cor do Link Baseado no Tema (Opcional, mas recomendado) */
-#app-container.theme-pau-brasil .main-nav { background-color: #f8d7da; border-color: #f5c6cb; }
-#app-container.theme-pau-brasil .main-nav a { color: #721c24; }
-#app-container.theme-pau-brasil .main-nav a:hover,
-#app-container.theme-pau-brasil .main-nav a:focus { background-color: #f5c6cb; color: #491217; }
-#app-container.theme-castanheira .main-nav { background-color: #f5e5d8; border-color: #e9d8c7; }
-#app-container.theme-castanheira .main-nav a { color: #5D2B02; }
-#app-container.theme-castanheira .main-nav a:hover,
-#app-container.theme-castanheira .main-nav a:focus { background-color: #e9d8c7; color: #3b1c01; }
-#app-container.theme-peroba-rosa .main-nav { background-color: #f8ddee; border-color: #f5c6e3; }
-#app-container.theme-peroba-rosa .main-nav a { color: #a01d5f; }
-#app-container.theme-peroba-rosa .main-nav a:hover,
-#app-container.theme-peroba-rosa .main-nav a:focus { background-color: #f5c6e3; color: #6f1443; }
-/* --- Fim dos Estilos do Menu --- */
-
 /* --- Estilos Adicionados para Logout --- */
-
-/* Estilo opcional para a seção do botão de logout */
-.profile-logout-section {
-    text-align: center; /* Centraliza o botão */
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px dashed #ccc; /* Linha separadora pontilhada */
-}
-
-/* Estilo específico para o botão de logout (vermelho) */
-/* Reutiliza a classe base .profile-button e adiciona a classe .danger */
-.profile-button.danger {
-    background-color: #d9534f; /* Cor vermelha (similar ao Bootstrap 'danger') */
-    color: white;
-    border-color: #d43f3a; /* Borda um pouco mais escura */
-}
-
-.profile-button.danger:hover {
-    background-color: #c9302c; /* Vermelho mais escuro no hover */
-    border-color: #ac2925;
-}
-
+.profile-logout-section { text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px dashed #ccc; }
+.profile-button.danger { background-color: #d9534f; color: white; border: none; }
+.profile-button.danger:hover { background-color: #c9302c; }
 /* --- Fim dos Estilos de Logout --- */
