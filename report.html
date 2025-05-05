@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Reflorestamento</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Basic styling for the results table and chart container */
+        #report-results table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        #report-results th,
+        #report-results td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        #report-results th {
+            background-color: #f2f2f2;
+        }
+        #chart-container {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        #report-search-form .form-group {
+            display: inline-block; /* Place form elements side-by-side */
+            margin-right: 15px;
+            vertical-align: bottom;
+        }
+        #report-search-form button {
+            display: inline-block;
+            width: auto; /* Adjust button width */
+            padding: 10px 15px;
+            vertical-align: bottom; /* Align button with inputs */
+        }
+    </style>
+</head>
+<body>
+    <div id="app-container"> <h1>Relatório de Reflorestamento</h1>
+
+        <form id="report-search-form">
+            <div class="form-group">
+                <label for="search-user">Usuário:</label>
+                <input type="text" id="search-user" name="search-user" placeholder="Nome do usuário">
+            </div>
+            <div class="form-group">
+                <label for="search-species">Espécie:</label>
+                <select id="search-species" name="search-species">
+                    <option value="">-- Todas as Espécies --</option>
+                    <option value="Ipe">Ipê</option>
+                    <option value="Angico">Angico</option>
+                    <option value="Aroeira">Aroeira</option>
+                    <option value="Jequitiba">Jequitibá</option>
+                    <option value="PerobaCampo">Peroba do Campo</option>
+                </select>
+            </div>
+            <button type="submit">Buscar</button>
+        </form>
+
+        <div id="report-results">
+            <h2>Resultados da Busca</h2>
+            <div id="results-table-container">
+                <p>Nenhum critério de busca aplicado ainda ou nenhum resultado encontrado.</p>
+            </div>
+        </div>
+
+        <div id="chart-container">
+            <h2>Total de Árvores Plantadas (Acumulado)</h2>
+            <canvas id="planting-chart"></canvas>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; padding-top: 15px; border-top: 1px solid #eee;">
+            <a href="profile.html">Voltar ao Perfil</a>
+        </div>
+
+    </div>
+
+    <script src="report_script.js"></script>
+</body>
+</html>
