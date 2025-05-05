@@ -14,35 +14,34 @@
             <div class="profile-avatar">
                 <h2>Seu Avatar</h2>
                 <img id="avatar-image" src="images/placeholder_tree.png" alt="Avatar Árvore" width="150">
-                </div>
+                <p id="avatar-stage-name" class="stage-name">Carregando estágio...</p>
+            </div>
 
             <div class="profile-info">
                 <h2>Informações</h2>
                 <div class="profile-stats">
                     <p>Total de Árvores Plantadas: <strong id="tree-count">0</strong></p>
+                    <hr> <h4>Detalhes por Espécie:</h4>
+                    <ul id="species-breakdown-list" class="species-list">
+                        <li>Ipês: <strong id="count-Ipe">0</strong></li>
+                        <li>Angicos: <strong id="count-Angico">0</strong></li>
+                        <li>Aroeiras: <strong id="count-Aroeira">0</strong></li>
+                        <li>Jequitibás: <strong id="count-Jequitiba">0</strong></li>
+                        <li>Peroba do Campo: <strong id="count-PerobaCampo">0</strong></li>
+                    </ul>
                 </div>
+
                 <div class="profile-actions">
                      <button id="go-to-log-button" class="profile-button primary">Registrar Nova Ação de Plantio</button>
                 </div>
+
                 <div class="profile-bio">
-                    <h2>BIO</h2>
-                    <div id="bio-display-area">
-                        <p id="bio-text">Carregando BIO...</p>
-                        <button id="edit-bio-button" class="profile-button">Editar BIO</button>
-                    </div>
-                    <form id="bio-edit-form" class="hidden">
-                        <textarea id="bio-input" rows="4" placeholder="Escreva algo sobre você..."></textarea>
-                        <button type="submit" class="profile-button">Salvar BIO</button>
-                        <button type="button" id="cancel-bio-edit" class="profile-button secondary">Cancelar</button>
-                    </form>
-                </div>
+                     </div>
             </div>
         </div>
 
         <div class="profile-nav">
-            <a href="log_reforestation.html">Registrar Plantio</a> |
-            <a href="index.html">Sair (Cadastro)</a>
-        </div>
+             </div>
 
     </div>
     <script src="profile_script.js"></script>

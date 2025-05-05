@@ -110,7 +110,7 @@ button[type="submit"]:hover { background-color: #4cae4c; }
 .profile-content { display: flex; flex-wrap: wrap; gap: 30px; margin-top: 20px; padding: 20px; background-color: rgba(0, 0, 0, 0.03); border-radius: 5px; }
 .profile-avatar { flex: 1; min-width: 180px; text-align: center; }
 .profile-avatar img { display: block; margin: 0 auto 10px auto; max-width: 150px; height: auto; border-radius: 50%; border: 4px solid #ccc; background-color: #fff; transition: border-color 0.5s ease; }
-#avatar-stage-name { font-style: italic; color: #555; font-size: 0.9em; } /* Estilo para o nome do estágio */
+/* #avatar-stage-name { font-style: italic; color: #555; font-size: 0.9em; } */ /* Estilo antigo ou removido - agora usando .stage-name */
 .profile-info { flex: 2; min-width: 250px; }
 .profile-content h2 { margin-top: 0; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 5px; color: #444; transition: border-color 0.5s ease, color 0.5s ease; }
 .profile-stats p { font-size: 1.1em; margin-bottom: 20px; }
@@ -145,6 +145,7 @@ button[type="submit"]:hover { background-color: #4cae4c; }
 #app-container.theme-pau-brasil .profile-stats strong { color: #721c24; }
 #app-container.theme-pau-brasil .profile-button:not(.secondary) { background-color: #dc3545; }
 #app-container.theme-pau-brasil .profile-button:not(.secondary):hover { background-color: #c82333; }
+/* #app-container.theme-pau-brasil .stage-name { color: #721c24; } */ /* Adicionado Estilo Tema Estágio */
 
 /* Tema Castanheira (Marrom) */
 #app-container.theme-castanheira { border-left-color: #8B4513; background-color: #f5e5d8; }
@@ -159,6 +160,7 @@ button[type="submit"]:hover { background-color: #4cae4c; }
 #app-container.theme-castanheira .profile-stats strong { color: #5D2B02; }
 #app-container.theme-castanheira .profile-button:not(.secondary) { background-color: #8B4513; }
 #app-container.theme-castanheira .profile-button:not(.secondary):hover { background-color: #693510; }
+/* #app-container.theme-castanheira .stage-name { color: #5D2B02; } */ /* Adicionado Estilo Tema Estágio */
 
 /* Tema Peroba-Rosa (Rosa) */
 #app-container.theme-peroba-rosa { border-left-color: #E83E8C; background-color: #f8ddee; }
@@ -173,3 +175,49 @@ button[type="submit"]:hover { background-color: #4cae4c; }
 #app-container.theme-peroba-rosa .profile-stats strong { color: #a01d5f; }
 #app-container.theme-peroba-rosa .profile-button:not(.secondary) { background-color: #E83E8C; }
 #app-container.theme-peroba-rosa .profile-button:not(.secondary):hover { background-color: #d42474; }
+/* #app-container.theme-peroba-rosa .stage-name { color: #a01d5f; } */ /* Adicionado Estilo Tema Estágio */
+
+.species-list {
+    list-style: none; /* Remove marcadores padrão da lista */
+    padding-left: 0; /* Remove padding padrão da lista */
+    margin-top: 10px;
+}
+
+.species-list li {
+    margin-bottom: 5px; /* Espaçamento entre itens */
+    font-size: 0.95em;
+    color: #333;
+}
+
+.species-list strong {
+    font-weight: bold;
+    margin-left: 5px; /* Espaço antes do número */
+    /* A cor pode herdar do tema via .profile-stats strong ou definir aqui */
+}
+
+.profile-stats hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 15px 0;
+}
+
+.profile-stats h4 {
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 1em;
+}
+
+/* --- CSS Adicionado para o Estágio do Avatar --- */
+.stage-name { /* Ou use #avatar-stage-name se você não adicionou a classe no HTML */
+    font-style: italic;
+    font-size: 0.9em; /* Tamanho de fonte ligeiramente menor */
+    color: #555; /* Cor cinza */
+    margin-top: 5px; /* Espaço acima do texto do estágio */
+    font-weight: bold; /* Texto em negrito */
+}
+
+/* Estilos de cor do estágio baseados no tema (opcional) */
+#app-container.theme-pau-brasil .stage-name { color: #721c24; }
+#app-container.theme-castanheira .stage-name { color: #5D2B02; }
+#app-container.theme-peroba-rosa .stage-name { color: #a01d5f; }
+/* --- Fim do CSS Adicionado --- */

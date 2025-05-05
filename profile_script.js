@@ -1,110 +1,156 @@
-// Arquivo: profile_script.js (Simplificado para Avatar Fixo por Tipo)
+// Arquivo: profile_script.js (Versão Completa Revisada)
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- Seletores de Elementos ---
     const appContainer = document.getElementById('app-container');
     const profileHeading = document.getElementById('profile-heading');
     const avatarImage = document.getElementById('avatar-image');
-    // Seletor avatarStageName REMOVIDO
-    const treeCountSpan = document.getElementById('tree-count');
-    const bioText = document.getElementById('bio-text');
-    const editBioButton = document.getElementById('edit-bio-button');
-    const bioDisplayArea = document.getElementById('bio-display-area');
-    const bioEditForm = document.getElementById('bio-edit-form');
-    const bioInput = document.getElementById('bio-input');
-    const cancelBioEditButton = document.getElementById('cancel-bio-edit');
+    const treeCountSpan = document.getElementById('tree-count'); // Onde o TOTAL é exibido
     const goToLogButton = document.getElementById('go-to-log-button');
+    // Seletores para contagem por espécie
+    const countIpe = document.getElementById('count-Ipe');
+    const countAngico = document.getElementById('count-Angico');
+    const countAroeira = document.getElementById('count-Aroeira');
+    const countJequitiba = document.getElementById('count-Jequitiba');
+    const countPerobaCampo = document.getElementById('count-PerobaCampo');
+    // Mapeamento (útil)
+    const speciesCountElements = {
+        Ipe: countIpe,
+        Angico: countAngico,
+        Aroeira: countAroeira,
+        Jequitiba: countJequitiba,
+        PerobaCampo: countPerobaCampo
+    };
+    // ... outros seletores que você possa ter (bio, etc.) ...
 
-    // --- Funções de Tema ---
+    // --- Função para Aplicar o Tema ---
     function applyTheme(themeName) {
-        if (!appContainer) return;
+        if (!appContainer) {
+            console.error("Profile: Elemento #app-container não encontrado para aplicar tema.");
+            return;
+        }
         const themes = ['theme-pau-brasil', 'theme-castanheira', 'theme-peroba-rosa'];
-        appContainer.classList.remove(...themes);
-        if (themeName && themes.includes(`theme-${themeName}`)) {
-            appContainer.classList.add(`theme-${themeName}`);
-            console.log(`Profile Page: Tema '${themeName}' aplicado via applyTheme.`);
+        const themeClassName = `theme-${themeName}`;
+
+        appContainer.classList.remove(...themes); // Limpa temas antigos
+
+        if (themeName && themes.includes(themeClassName)) {
+            appContainer.classList.add(themeClassName);
+            console.log(`Profile: Tema '${themeName}' aplicado.`);
         } else {
-            console.log('Profile Page: Nenhum tema válido para aplicar via applyTheme.');
+            console.log(`Profile: Nenhum tema válido ('${themeName}') ou tema padrão.`);
         }
     }
 
-    // --- Função de Perfil ---
-    // Função getTreeStage REMOVIDA
-
-    /** Carrega e exibe todos os dados do perfil */
+    // --- Função para Carregar Dados do Perfil ---
     function loadProfileData() {
-        console.log("Iniciando loadProfileData (com avatar fixo)...");
+        console.log("Profile: Iniciando loadProfileData...");
         try {
-            // 1. Carregar dados do localStorage
+            // 1. Carregar dados básicos do localStorage
             const userName = localStorage.getItem('userName') || "Usuário";
-            const userTheme = localStorage.getItem('userTheme'); // Lê a árvore escolhida: 'pau-brasil', etc.
-            const totalTrees = parseInt(localStorage.getItem('totalTreesPlanted') || '0', 10);
-            const userBio = localStorage.getItem('userBio') || "Edite sua BIO...";
+            const userTheme = localStorage.getItem('userTheme');
+            // const userBio = localStorage.getItem('userBio') || "Edite sua BIO..."; // Se tiver bio
 
-            console.log(`Dados lidos - userName: ${userName}, userTheme: ${userTheme}, totalTrees: ${totalTrees}`);
+            console.log(`Profile: Dados lidos - userName: ${userName}, userTheme: ${userTheme}`);
 
-            // 2. Aplicar tema geral da página (cor)
-            if (userTheme) {
-                applyTheme(userTheme);
-            } else {
-                console.warn("Nenhum 'userTheme' encontrado. Usando tema padrão.");
-                applyTheme(null);
-            }
+            // 2. APLICAR O TEMA
+            applyTheme(userTheme);
 
-            // 3. Atualizar elementos visuais (nome, contagem, bio)
+            // 3. Atualizar Nome do Usuário
             if (profileHeading) profileHeading.textContent = `Perfil de ${userName}`;
-            if (treeCountSpan) treeCountSpan.textContent = totalTrees.toString(); // Contagem ainda é exibida
-            if (bioText) bioText.textContent = userBio;
 
-            // 4. Atualizar Avatar (Imagem Fixa Baseada no userTheme)
-            let avatarFilename = 'placeholder_tree.png'; // Default placeholder
-            let avatarAltText = 'Avatar Padrão';
-
-            if (userTheme === 'pau-brasil') {
-                avatarFilename = 'pau-brasil.jpg'; // Nome exato do arquivo
-                avatarAltText = 'Avatar Pau-Brasil';
-            } else if (userTheme === 'castanheira') {
-                avatarFilename = 'castanheira.jpeg'; // Nome exato do arquivo
-                avatarAltText = 'Avatar Castanheira';
-            } else if (userTheme === 'peroba-rosa') {
-                avatarFilename = 'Peroba-rosa.jpg'; // Nome exato com 'P' maiúsculo
-                avatarAltText = 'Avatar Peroba-Rosa';
-            } else {
-                console.warn("userTheme não corresponde a nenhuma árvore conhecida para o avatar.");
-            }
-
+            // 4. ATUALIZAR AVATAR
             if (avatarImage) {
-                const imagePath = `./images/${avatarFilename}`;
-                console.log(`Tentando carregar avatar fixo: ${imagePath}`);
+                let avatarFilename = 'placeholder_tree.png'; // Default
+                let avatarAltText = 'Avatar Padrão';
+                if (userTheme === 'pau-brasil') {
+                    avatarFilename = 'pau-brasil.jpg';
+                    avatarAltText = 'Avatar Pau-Brasil';
+                } else if (userTheme === 'castanheira') {
+                    avatarFilename = 'castanheira.jpeg';
+                    avatarAltText = 'Avatar Castanheira';
+                } else if (userTheme === 'peroba-rosa') {
+                    avatarFilename = 'Peroba-rosa.jpg';
+                    avatarAltText = 'Avatar Peroba Rosa';
+                }
+
+                const imagePath = `images/${avatarFilename}`;
+                console.log(`Profile: Tentando carregar avatar: ${imagePath}`);
                 avatarImage.src = imagePath;
                 avatarImage.alt = avatarAltText;
-
-                // Fallback genérico se a imagem (mesmo a correta) não carregar
                 avatarImage.onerror = () => {
-                    console.error(`ERRO: Imagem ${imagePath} não encontrada ou falha ao carregar. Usando placeholder.`);
+                    console.warn(`Profile: Falha ao carregar ${imagePath}. Usando placeholder.`);
                     avatarImage.src = 'images/placeholder_tree.png';
-                    avatarImage.alt = 'Avatar Padrão (Erro ao carregar)';
+                    avatarImage.alt = 'Avatar Padrão';
                 };
             } else {
-                 console.error("Elemento 'avatarImage' não encontrado no HTML.");
+                console.warn("Profile: Elemento #avatar-image não encontrado.");
             }
 
-            // Lógica para atualizar avatarStageName REMOVIDA
+            // 5. Carregar Contagem por Espécie e CALCULAR TOTAL
+            let calculatedTotal = 0;
+            console.log("Profile: Carregando contagem por espécie e calculando total...");
+            for (const species in speciesCountElements) {
+                const element = speciesCountElements[species];
+                if (element) {
+                    const speciesKey = `treesPlanted_${species}`;
+                    const count = parseInt(localStorage.getItem(speciesKey) || '0', 10);
+                    element.textContent = count.toString();
+                    calculatedTotal += count;
+                }
+            }
+
+            // 6. Exibir o TOTAL CALCULADO
+            if (treeCountSpan) {
+                treeCountSpan.textContent = calculatedTotal.toString();
+                console.log(`Profile: Total calculado a partir das espécies: ${calculatedTotal}`);
+            } else {
+                 console.warn("Profile: Elemento #tree-count não encontrado.");
+            }
+
+            // --- START: Código Adicionado para determinar e exibir o estágio ---
+            const stageNameElement = document.getElementById('avatar-stage-name');
+            let stageName = "Plantada"; // Estágio Padrão (0-99 árvores)
+
+            if (calculatedTotal >= 1500) {
+                stageName = "Anciã";
+            } else if (calculatedTotal >= 700) {
+                stageName = "Madura";
+            } else if (calculatedTotal >= 300) {
+                stageName = "Jovem";
+            } else if (calculatedTotal >= 100) {
+                stageName = "Broto";
+            }
+            // Não precisa de 'else' para 'Plantada' pois é o padrão inicial
+
+            if (stageNameElement) {
+                stageNameElement.textContent = `Estágio: ${stageName}`; // Define o texto no elemento HTML
+                console.log(`Profile: Estágio definido como: ${stageName}`);
+            } else {
+                console.warn("Profile: Elemento #avatar-stage-name não encontrado.");
+            }
+            // --- END: Código Adicionado ---
+
+
+            // 7. Atualizar Bio (se houver)
+            // const bioTextElement = document.getElementById('bio-text');
+            // if (bioTextElement) bioTextElement.textContent = userBio;
 
         } catch (e) {
-            console.error("Erro GERAL ao carregar dados do perfil:", e);
+            console.error("Profile: Erro GERAL ao carregar dados do perfil:", e);
             if (profileHeading) profileHeading.textContent = "Erro ao carregar perfil";
         }
     }
 
-    // --- Configuração dos Event Listeners (sem alterações) ---
-    // ... (Listeners para Editar Bio, Cancelar, Salvar Bio, Ir para Log) ...
-    if (editBioButton && bioDisplayArea && bioEditForm && bioInput) { editBioButton.addEventListener('click', () => { /* ... */ }); }
-    if (cancelBioEditButton && bioDisplayArea && bioEditForm) { cancelBioEditButton.addEventListener('click', () => { /* ... */ }); }
-    if (bioEditForm && bioInput && bioText && bioDisplayArea) { bioEditForm.addEventListener('submit', (event) => { /* ... */ }); }
-    if (goToLogButton) { goToLogButton.addEventListener('click', () => { window.location.href = 'log_reforestation.html'; }); }
+    // --- Configuração dos Event Listeners ---
+    if (goToLogButton) {
+        goToLogButton.addEventListener('click', () => {
+            window.location.href = 'log_reforestation.html'; // Navega para a página de log
+        });
+    }
+    // ... outros listeners (bio edit, etc.)
 
     // --- Inicialização ---
-    loadProfileData(); // Carrega tudo ao iniciar a página
+    loadProfileData(); // Chama a função principal ao carregar a página
 
 }); // Fim do DOMContentLoaded
