@@ -221,3 +221,110 @@ button[type="submit"]:hover { background-color: #4cae4c; }
 #app-container.theme-castanheira .stage-name { color: #5D2B02; }
 #app-container.theme-peroba-rosa .stage-name { color: #a01d5f; }
 /* --- Fim do CSS Adicionado --- */
+
+/* --- Estilos Adicionados para a Página de Relatório (report.html) --- */
+
+#report-results table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#report-results th,
+#report-results td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#report-results th {
+    background-color: #f2f2f2;
+}
+
+#chart-container {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+/* Ajustes no layout do formulário de busca do relatório */
+#report-search-form {
+    margin-bottom: 25px; /* Adiciona espaço abaixo do formulário */
+    padding-bottom: 20px; /* Adiciona espaço interno abaixo */
+    border-bottom: 1px solid #eee; /* Linha separadora opcional */
+    display: flex; /* Usar flexbox para alinhar melhor */
+    flex-wrap: wrap; /* Permitir quebra de linha */
+    gap: 15px; /* Espaço entre os elementos */
+    align-items: flex-end; /* Alinha itens na base */
+}
+
+#report-search-form .form-group {
+    /* display: inline-block; */ /* Removido - Flexbox cuida disso */
+    /* margin-right: 15px; */ /* Removido - Gap cuida disso */
+    /* vertical-align: bottom; */ /* Removido - align-items cuida disso */
+    margin-bottom: 0; /* Remove margem padrão do form-group se necessário */
+    flex-grow: 1; /* Permite que os inputs cresçam */
+}
+#report-search-form .form-group label {
+    margin-bottom: 3px; /* Pequeno ajuste na label */
+}
+
+#report-search-form button {
+    /* display: inline-block; */ /* Removido */
+    width: auto; /* Largura automática */
+    padding: 10px 15px;
+    /* vertical-align: bottom; */ /* Removido */
+    height: 40px; /* Alinha altura com inputs/selects (ajuste conforme necessário) */
+    flex-shrink: 0; /* Evita que o botão encolha */
+    cursor: pointer; /* Muda o cursor no botão */
+}
+
+/* --- Fim dos Estilos da Página de Relatório --- */
+
+/* --- Estilos Adicionados para a Página de Destaques (highlights.html) --- */
+
+#highlights-container {
+    display: flex;
+    justify-content: space-around; /* Espaça os itens uniformemente */
+    align-items: flex-start; /* Alinha itens no topo */
+    flex-wrap: wrap; /* Permite quebrar linha se não couber */
+    margin-top: 30px;
+    gap: 20px; /* Espaço entre os blocos */
+}
+
+.user-highlight-block {
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: rgba(0,0,0,0.02); /* Fundo leve */
+    border: 1px solid #eee;
+    flex-basis: calc(33.333% - 20px); /* Tenta colocar 3 por linha, ajustando pelo gap */
+    min-width: 150px; /* Largura mínima */
+    box-sizing: border-box;
+}
+
+.user-highlight-block img {
+    display: block;
+    width: 100px; /* Tamanho do avatar */
+    height: 100px;
+    border-radius: 50%; /* Avatar circular */
+    object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
+    margin: 0 auto 10px auto; /* Centraliza e adiciona espaço abaixo */
+    border: 4px solid #ccc; /* Borda padrão */
+    background-color: #fff;
+    transition: border-color 0.5s ease; /* Transição da cor da borda do tema */
+}
+
+.user-highlight-block p {
+    font-weight: bold;
+    margin-top: 5px;
+    color: #333;
+    word-wrap: break-word; /* Quebra nomes longos */
+}
+
+ /* Estilos de borda do avatar de destaque baseados no tema (igual ao profile) */
+#app-container.theme-pau-brasil .user-highlight-block img { border-color: #dc3545; }
+#app-container.theme-castanheira .user-highlight-block img { border-color: #8B4513; }
+#app-container.theme-peroba-rosa .user-highlight-block img { border-color: #E83E8C; }
+
+/* --- Fim dos Estilos da Página de Destaques --- */
