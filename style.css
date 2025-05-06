@@ -244,22 +244,89 @@ button[type="submit"]:hover { background-color: #4cae4c; }
 
 
 /* --- Estilos Adicionados para a Página de Relatório (report.html) --- */
-#report-results table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; word-wrap: break-word; }
-#report-results th, #report-results td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-#report-results th { background-color: #f2f2f2; }
-#chart-container { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
-#report-search-form { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #eee; display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; }
-#report-search-form .form-group { margin-bottom: 0; flex-grow: 1; min-width: 150px; }
-#report-search-form .form-group label { margin-bottom: 3px; }
-#report-search-form button { width: auto; padding: 10px 15px; height: 40px; flex-shrink: 0; cursor: pointer; margin-top: 0; font-size: 1em; background-color: #5bc0de; border: none; color: white; }
-#report-search-form button:hover { background-color: #31b0d5; }
+#report-results table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+#report-results th,
+#report-results td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#report-results th {
+    background-color: #f2f2f2;
+}
+
+#chart-container {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    position: relative; /* Importante para o Chart.js controlar o tamanho */
+    height: 400px; /* Defina uma altura fixa desejada */
+    max-height: 450px; /* Ou defina uma altura máxima, ajuste conforme necessário */
+    width: 100%; /* Garante que ocupe a largura disponível */
+}
+
+#report-search-form {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+#report-search-form .form-group {
+    margin-bottom: 0;
+    flex-grow: 1;
+    min-width: 150px;
+}
+
+#report-search-form .form-group label {
+    margin-bottom: 3px;
+}
+
+#report-search-form button {
+    width: auto;
+    padding: 10px 15px;
+    height: 40px;
+    flex-shrink: 0;
+    cursor: pointer;
+    margin-top: 0;
+    font-size: 1em;
+    background-color: #5bc0de;
+    border: none;
+    color: white;
+}
+
+#report-search-form button:hover {
+    background-color: #31b0d5;
+}
 /* --- Fim dos Estilos da Página de Relatório --- */
 
 
 /* --- Estilos Adicionados para Logout --- */
-.profile-logout-section { text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px dashed #ccc; }
-.profile-button.danger { background-color: #d9534f; color: white; border: none; }
-.profile-button.danger:hover { background-color: #c9302c; }
+.profile-logout-section {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px dashed #ccc;
+}
+.profile-button.danger {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+}
+.profile-button.danger:hover {
+    background-color: #c9302c;
+}
 /* --- Fim dos Estilos de Logout --- */
 
 /* --- Estilos Adicionados para a Seção de Bio no Perfil --- */
