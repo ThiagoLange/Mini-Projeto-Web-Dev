@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showMessage('Por favor, selecione uma árvore avatar.', 'error');
                 return;
             }
-            const selectedTreeValue = selectedTreeRadio.value; // Ex: "pau-brasil"
+            const selectedTreeValue = selectedTreeRadio.value;
 
             if (!username || !password) {
                 showMessage('Por favor, preencha o usuário e a senha.', 'error');
@@ -90,7 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = 'profile.html';
             }, redirectDelay);
 
-            /* --- EXEMPLO DE CÓDIGO PARA ENVIO AO BACKEND (COMENTADO) ---
+            /* --- Exemplo de código para envio para o Backend ---
+            
             // const submitButton = form.querySelector('button[type="submit"]');
             // if(submitButton) {
             //     submitButton.disabled = true;
@@ -126,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //         // }
             //     }
             // })();
-            --- FIM DO EXEMPLO COMENTADO --- */
+            */
         });
     }
 });

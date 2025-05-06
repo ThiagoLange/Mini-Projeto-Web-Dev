@@ -1,5 +1,5 @@
 // Arquivo: highlights_script.js
-// Usa dados do localStorage e inclui exemplo COMENTADO de busca de dados do backend
+// Usa dados do localStorage e inclui exemplo de busca de dados do backend
 
 document.addEventListener('DOMContentLoaded', () => {
     const appContainer = document.getElementById('app-container');
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Função para Exibir os Destaques ---
-    // Tornada async para o caso de usar o fetch do backend (comentado)
+    // Tornada async para o caso de usar o fetch do backend
     async function displayHighlights() {
         if (!highlightsContainer) {
             console.error("Highlights: Container #highlights-container não encontrado.");
@@ -45,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let topUsersData = [];
 
-        // --- LÓGICA ATUAL: Carregar dados do localStorage ---
         try {
             const reforestationLogEntries = JSON.parse(localStorage.getItem('reforestationLogEntries')) || [];
             const userProfiles = JSON.parse(localStorage.getItem('userProfiles')) || [];
@@ -77,15 +76,12 @@ document.addEventListener('DOMContentLoaded', () => {
             highlightsContainer.innerHTML = '<p>Erro ao carregar destaques.</p>';
             return;
         }
-        // --- FIM DA LÓGICA ATUAL ---
 
-
-        /* --- EXEMPLO DE COMO BUSCAR DADOS DE DESTAQUE DO BACKEND (COMENTADO) ---
-        // Esta função substituiria a lógica de localStorage acima se fosse usada.
+        /* --- Exemplo de como buscar os dados de destaque no Backend ---
         
         async function fetchHighlightsDataFromBackend() {
             console.log("Buscando dados de destaques do backend...");
-            // const highlightsButton = document.getElementById('algum-botao-de-atualizar-destaques'); // Exemplo
+            // const highlightsButton = document.getElementById('algum-botao-de-atualizar-destaques');
             // if(highlightsButton) highlightsButton.disabled = true;
 
             try {
@@ -101,8 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    // Espera-se que 'data' seja um array de objetos como:
-                    // [{ username: "Nome", totalTrees: QTD, treeAvatar: "tipo-avatar" }, ...]
                     console.log("Dados de destaques recebidos do backend:", data);
                     return data; 
                 } else {
@@ -120,13 +114,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Para usar o backend, você chamaria a função aqui:
         // topUsersData = await fetchHighlightsDataFromBackend();
-        --- FIM DO EXEMPLO DE BACKEND --- */
+        */
 
 
         // --- Renderização dos Destaques (comum para localStorage ou backend) ---
-        highlightsContainer.innerHTML = ''; // Limpa "Carregando..." ou erros anteriores
+        highlightsContainer.innerHTML = '';
         if (topUsersData.length === 0) {
             highlightsContainer.innerHTML = '<p>Ainda não há dados de destaque suficientes.</p>';
             return;
@@ -147,12 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const name = document.createElement('p');
             name.textContent = user.username;
-            // Opcional: Exibir contagem de árvores no destaque
-            // const treeCountInfo = document.createElement('span');
-            // treeCountInfo.textContent = ` (${user.totalTrees} árvores)`;
-            // treeCountInfo.style.fontSize = '0.8em';
-            // name.appendChild(treeCountInfo);
-
+          
             userBlock.appendChild(img);
             userBlock.appendChild(name);
             highlightsContainer.appendChild(userBlock);
@@ -161,6 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Inicialização ---
     loadSavedTheme();
-    displayHighlights(); // Chama a função que agora pode (hipoteticamente) ser assíncrona
+    displayHighlights();
 
-}); // Fim do DOMContentLoaded
+});

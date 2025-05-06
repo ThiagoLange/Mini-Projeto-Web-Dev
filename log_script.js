@@ -86,9 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('reforestationLogEntries', JSON.stringify(reforestationLogEntries));
                 console.log("Novo registro de plantio adicionado à lista geral:", logEntry);
 
-                // As chaves 'treesPlanted_*' e 'totalTreesPlanted' NÃO SÃO MAIS ATUALIZADAS DIRETAMENTE AQUI.
-                // O profile_script.js calculará esses valores a partir de 'reforestationLogEntries'.
-
                 showLogMessage(`Ação registrada: ${quantity} ${species} plantadas por ${userName}!`, 'success');
                 logForm.reset();
 
@@ -96,10 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("Log: Erro ao salvar registro de plantio:", e);
                 showLogMessage("Aviso: Erro ao salvar dados do plantio.", "error");
             }
-            // --- FIM DA LÓGICA ATUALIZADA ---
 
+            /* --- Exemplo de código para enviar log de ação para o Backend ---
 
-            /* --- EXEMPLO DE CÓDIGO PARA ENVIAR LOG DE AÇÃO AO BACKEND (COMENTADO) ---
             // const logEntryDataForBackend = {
             //     username: userName,
             //     species: species,
@@ -134,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //         submitButton.textContent = 'Registrar Ação';
             //     }
             // }
-            --- FIM DO EXEMPLO COMENTADO --- */
+            */
         });
     }
 });

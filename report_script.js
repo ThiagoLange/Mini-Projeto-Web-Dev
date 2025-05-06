@@ -1,4 +1,4 @@
-// Arquivo: report_script.js (Modificado para formatar data do gráfico como DD/MM/YYYY)
+// Arquivo: report_script.js Já Modificado para formatar data do gráfico como DD/MM/YYYY
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- Mock Data (Coleção Fictícia) ---
@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
         { user: "Charlie", species: "PerobaCampo", quantity: 40, date: "2025-04-28" },
         { user: "Bob", species: "Angico", quantity: 18, date: "2025-05-01" },
         { user: "Alice", species: "Angico", quantity: 22, date: "2025-05-04" },
-        // Adicione mais dados fictícios conforme necessário
     ];
 
     // --- Seletores ---
@@ -23,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchSpeciesSelect = document.getElementById('search-species');
     const resultsContainer = document.getElementById('results-table-container');
     const chartCanvas = document.getElementById('planting-chart');
-    let plantingChartInstance = null; // To hold the chart object
+    let plantingChartInstance = null;
 
     // --- Funções de Tema ---
     function applyTheme(themeName) {
@@ -92,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsContainer.appendChild(table);
     }
 
-    // --- Função para Gerar o Gráfico de Linha (Acumulado) ---
+    // --- Função para Gerar o Gráfico de Linha Acumulado ---
     function generateChart(data) {
          if (plantingChartInstance) {
             plantingChartInstance.destroy();
@@ -130,13 +129,12 @@ document.addEventListener('DOMContentLoaded', () => {
             cumulativeData[dateKey] = cumulativeTotal;
         });
 
-        // **** MODIFICAÇÃO AQUI para formatar as labels do gráfico ****
         const labels = Object.keys(cumulativeData).map(dateKey =>
             new Date(dateKey + 'T00:00:00').toLocaleDateString('pt-BR', {
                 day: '2-digit', month: '2-digit', year: 'numeric'
             })
         );
-        // **** FIM DA MODIFICAÇÃO ****
+
         const chartDataPoints = Object.values(cumulativeData);
 
         const chartConfig = {
@@ -170,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     x: {
                          title: {
                              display: true,
-                             text: 'Data (DD/MM/YYYY)' // Atualiza o título do eixo X para clareza
+                             text: 'Data (DD/MM/YYYY)' // Atualiza o título do eixo X
                         }
                     }
                 }
@@ -197,9 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
         generateChart(filteredData); // Atualiza gráfico com dados filtrados e labels formatadas
     });
 
-    // --- Inicialização ---
     loadSavedTheme();
     displayResults(mockReforestationData);
     generateChart(mockReforestationData); // Gera gráfico inicial com labels formatadas
 
-}); // Fim do DOMContentLoaded
+});

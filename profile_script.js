@@ -1,7 +1,7 @@
 // Arquivo: profile_script.js
 // Carrega avatar priorizando userProfiles, com fallback para userTheme da sessão.
 // Calcula totais do usuário a partir de reforestationLogEntries.
-// Bio por usuário. Inclui exemplo de backend comentado.
+// Bio por usuário.
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- Seletores de Elementos ---
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     editBioButton.classList.remove('hidden');
                     showBioMessage("Bio salva com sucesso!", "success");
 
-                    // Exemplo de chamada para backend (COMENTADO):
+                    // Exemplo de chamada para backend:
                     // if (currentUserName) {
                     //    saveProfileDataToBackend({ username: currentUserName, bio: newBio, theme: localStorage.getItem('userTheme') });
                     // }
@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn("Botão 'saveBioButton' não encontrado.");
     }
 
-    // --- Configuração dos Event Listeners (existentes) ---
+    // --- Configuração dos Event Listeners ---
     if (goToLogButton) {
         goToLogButton.addEventListener('click', () => {
             // Verifica se o usuário está "logado" antes de redirecionar
@@ -257,8 +257,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = 'log_reforestation.html';
             } else {
                 alert("Por favor, faça login ou cadastre-se primeiro para registrar uma ação.");
-                // Opcional: redirecionar para index.html
-                // window.location.href = 'index.html';
             }
         });
     } else {
@@ -272,8 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     localStorage.removeItem('userName');
                     localStorage.removeItem('userTheme');
-                    // Não remove userBio_NOMEUSUARIO, pois ela deve persistir para o usuário.
-                    // Remove a chave 'userBio' genérica antiga, se existir, por limpeza.
                     localStorage.removeItem('userBio'); 
 
                     Object.keys(localStorage).forEach(key => {
@@ -297,7 +293,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadProfileData();
 
 
-    /* --- EXEMPLO DE CÓDIGO PARA ENVIAR ATUALIZAÇÕES DO PERFIL AO BACKEND (COMENTADO) ---
+    /* --- Exemplo de código para enviar atualizações do perfil para o Backend ---
+
     async function saveProfileDataToBackend(dataToSave) {
         // dataToSave seria um objeto como { username: "usuárioLogado", bio: "Nova bio...", theme: "novoTema" }
         // O 'username' é crucial para o backend saber qual perfil atualizar.
@@ -307,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         console.log("Tentando enviar dados do perfil ao backend:", dataToSave);
-        // const saveButton = document.getElementById('algum-botao-salvar-no-servidor'); // Botão hipotético
+        // const saveButton = document.getElementById('algum-botao-salvar-no-servidor');
         // if(saveButton) saveButton.disabled = true;
         try {
             // SUBSTITUA '/api/profile/update' ou `/api/users/${dataToSave.username}` pela URL REAL
@@ -325,7 +322,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log("Perfil atualizado com sucesso no backend:", result);
                 showBioMessage("Dados do perfil salvos no servidor!", "success");
                 
-                // Opcional: atualizar localStorage/UI com dados retornados pelo backend.
+                // atualizar localStorage/UI com dados retornados pelo backend.
+
                 // if(result.bio) localStorage.setItem(`userBio_${dataToSave.username}`, result.bio);
                 // if(result.theme) {
                 //    localStorage.setItem('userTheme', result.theme); // Atualiza tema da sessão
@@ -337,7 +335,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 //        localStorage.setItem('userProfiles', JSON.stringify(userProfiles));
                 //    }
                 // }
+
                 // loadProfileData(); // Para refletir quaisquer mudanças
+                
             } else {
                 const errorResult = await response.json().catch(() => ({ message: `Erro ${response.status} ao salvar no servidor.` }));
                 console.error("Erro do backend ao atualizar perfil:", errorResult);
@@ -350,6 +350,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // if(saveButton) saveButton.disabled = false;
         }
     }
-    --- FIM DO EXEMPLO COMENTADO PARA BACKEND --- */
+    */
 
 });
