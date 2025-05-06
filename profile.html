@@ -43,14 +43,21 @@
                      <button id="go-to-log-button" class="profile-button primary">Registrar Nova Ação de Plantio</button>
                 </div>
 
-                <div class="profile-bio">
-                     </div>
-            </div>
-        </div> <div class="profile-logout-section">
+                <div class="profile-bio-section">
+                    <h3>Minha Bio</h3>
+                    <div id="bio-display-area">
+                        <p id="bio-text-display">Sua bio ainda não foi definida. Clique em editar para adicionar uma!</p>
+                    </div>
+                    <div id="bio-edit-area" class="hidden">
+                        <textarea id="bio-textarea" rows="5" placeholder="Escreva algo sobre você..."></textarea>
+                        <button id="save-bio-button" class="profile-button primary">Salvar Bio</button>
+                        <button id="cancel-edit-bio-button" class="profile-button secondary">Cancelar</button>
+                    </div>
+                    <button id="edit-bio-button" class="profile-button secondary">Editar Bio</button>
+                    <div id="bio-message" class="message" style="display: none;"></div> </div>
+                </div> </div> <div class="profile-logout-section">
              <button id="logout-button" class="profile-button danger">Sair (Logout)</button>
         </div>
-        <div class="profile-nav">
-             </div>
 
     </div>
     <script src="profile_script.js"></script>

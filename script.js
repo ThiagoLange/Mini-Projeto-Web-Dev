@@ -1,4 +1,4 @@
-// Arquivo: script.js (Para a página de cadastro: index.html)
+// Arquivo: script.js - Para a página de cadastro: index.html
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- Seletores de Elementos ---
@@ -11,21 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Funções Auxiliares ---
 
-    /**
-     * Aplica a classe CSS de tema ao container principal.
-     * Usada para a exibição TEMPORÁRIA durante o submit.
-     * @param {string | null} themeName - O nome do tema ou null para remover.
-     */
+    /** Aplica tema visual temporário */
     function applyTheme(themeName) {
         if (!appContainer) return;
         const themes = ['theme-pau-brasil', 'theme-castanheira', 'theme-peroba-rosa'];
-        appContainer.classList.remove(...themes); // Limpa temas anteriores
-
+        appContainer.classList.remove(...themes);
         if (themeName && themes.includes(`theme-${themeName}`)) {
             appContainer.classList.add(`theme-${themeName}`);
-            console.log(`Cadastro Page: Tema temporário '${themeName}' aplicado.`);
-        } else {
-            console.log('Cadastro Page: Tema visual removido ou nome inválido.');
         }
     }
 
@@ -33,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function showMessage(text, type = 'success') {
         if (!messageDiv) return;
         messageDiv.textContent = text;
-        messageDiv.className = '';
+        messageDiv.className = ''; // Limpa classes antigas
         messageDiv.classList.add('message', `message-${type}`);
     }
 
@@ -46,83 +38,150 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Lógica Principal da Página de Cadastro ---
 
-    // 1. NÃO carregar tema salvo ao entrar na página de cadastro.
-    console.log("Página de cadastro carregada com tema padrão.");
-
-    // 2. Configurar o listener para o envio do formulário de cadastro
     if (form) {
         form.addEventListener('submit', (event) => {
-            event.preventDefault(); // Impede o envio padrão
+            event.preventDefault(); // Impede o envio padrão do formulário
             clearMessage(); // Limpa mensagens antigas
 
             // --- Validação ---
             const username = usernameInput.value.trim();
-            const password = passwordInput.value; // Lembrete: Inseguro em produção!
+            const password = passwordInput.value; // Apenas para validação local, não salvar!
             const selectedTreeRadio = document.querySelector('input[name="tree"]:checked');
 
             if (!selectedTreeRadio) {
                 showMessage('Por favor, selecione uma árvore avatar.', 'error');
                 return;
             }
-            const selectedTreeValue = selectedTreeRadio.value; // ex: 'pau-brasil'
+            const selectedTreeValue = selectedTreeRadio.value;
 
             if (!username || !password) {
                 showMessage('Por favor, preencha o usuário e a senha.', 'error');
                 return;
             }
 
-            // --- Processamento do Sucesso ---
+            // --- Objeto de Dados (Apenas para exemplo/log, se necessário) ---
+             const userDataExample = {
+                 username: username,
+                 // password: password, // Não salvar senha no localStorage!
+                 treeAvatar: selectedTreeValue
+             };
+             console.log("Dados de cadastro (exemplo):", userDataExample); // Log para debug
 
-            // Criar o objeto de usuário (para eventual envio ao backend)
-            const userData = {
-                username: username,
-                password: password, // Apenas para demonstração da estrutura JSON
-                treeAvatar: selectedTreeValue
-            };
-            const userDataJSON = JSON.stringify(userData, null, 2);
-            console.log("Objeto de Usuário (JSON):", userDataJSON);
+            // Salva direto no localStorage e redireciona
 
-            // 1. SALVAR dados essenciais no localStorage para outras páginas
+            // 1. Salva dados essenciais para o frontend no localStorage SEM SENHA
+             try {
+                 localStorage.setItem('userTheme', selectedTreeValue);
+                 localStorage.setItem('userName', username);
+                 console.log(`Tema '${selectedTreeValue}' e usuário '${username}' salvos no localStorage.`);
+             } catch (e) {
+                 console.error("Erro crítico ao salvar dados essenciais no localStorage:", e);
+                 showMessage("Erro ao salvar preferências. Não foi possível continuar.", "error");
+                 return; // Interrompe se não puder salvar no localStorage
+             }
+
+            // 2. Aplicar tema (temporário nesta página)
+             applyTheme(selectedTreeValue);
+
+            // 3. Exibir mensagem de sucesso e indicar redirecionamento
+             showMessage(`Cadastro de ${username} realizado! Redirecionando para o seu perfil...`, 'success');
+
+            // 4. Limpar formulário
+             form.reset();
+
+            // 5. Agendar redirecionamento para o perfil
+             const redirectDelay = 1500; // Tempo em milissegundos
+             setTimeout(() => {
+                 applyTheme(null); // Reseta tema visual desta página
+                 window.location.href = 'profile.html'; // Redireciona
+             }, redirectDelay);
+
+
+            /* --- Exemplo de código para envio ao Backend ---
+
+            // Desabilitar botão para evitar múltiplos envios
+            // const submitButton = form.querySelector('button[type="submit"]');
+            // submitButton.disabled = true;
+            // submitButton.textContent = 'Cadastrando...';
+
+            // Objeto de Dados para Envio ao Backend
+            // const userDataToSend = {
+            //     username: username,
+            //     password: password, // Enviar para backend via HTTPS
+            //     treeAvatar: selectedTreeValue
+            // };
+
             try {
-                localStorage.setItem('userTheme', selectedTreeValue); // Salva a árvore/tema escolhido
-                localStorage.setItem('userName', username);         // Salva o nome do usuário
-                console.log(`Tema '${selectedTreeValue}' e usuário '${username}' salvos no localStorage.`);
-            } catch (e) {
-                console.error("Erro crítico ao salvar dados essenciais no localStorage:", e);
-                showMessage("Erro ao salvar preferências. Não foi possível continuar.", "error");
-                return;
+                // Substituir '/api/register' pela URL REAL do seu endpoint de backend
+                console.log("Enviando para backend:", JSON.stringify(userDataToSend)); // Log para debug.
+                const response = await fetch('/api/register', {
+                    method: 'POST', // Método HTTP para criar um recurso
+                    headers: {
+                        'Content-Type': 'application/json', // Informa que estamos enviando JSON
+                        'Accept': 'application/json' // Opcional: informa que esperamos JSON de volta
+                    },
+                    body: JSON.stringify(userDataToSend) // Converte o objeto JS em string JSON
+                });
+
+                // Verifica se a resposta do backend foi bem-sucedida
+                if (response.ok) {
+                    const result = await response.json().catch(() => ({})); // Pega JSON ou objeto vazio se não houver corpo
+                    console.log("Backend respondeu com sucesso:", result);
+
+                    // --- SUCESSO: Backend confirmou o cadastro ---
+                    try {
+                        // 1. Salvar dados do frontend no localStorage (NUNCA a senha!)
+                        localStorage.setItem('userTheme', selectedTreeValue);
+                        localStorage.setItem('userName', username);
+                        console.log(`Tema '${selectedTreeValue}' e usuário '${username}' salvos no localStorage.`);
+
+                        // 2. Aplicar tema visual temporário
+                        applyTheme(selectedTreeValue);
+
+                        // 3. Exibir mensagem de sucesso e indicar redirecionamento
+                        showMessage(`Cadastro de ${username} realizado com sucesso! Redirecionando...`, 'success');
+
+                        // 4. Limpar formulário
+                        form.reset();
+
+                        // 5. Agendar redirecionamento para o perfil
+                        const redirectDelay = 1500;
+                        setTimeout(() => {
+                            applyTheme(null); // Reseta tema visual desta página
+                            window.location.href = 'profile.html'; // Redireciona
+                        }, redirectDelay);
+
+                    } catch (e) {
+                        console.error("Erro ao processar sucesso no frontend (localStorage/redirect):", e);
+                        showMessage("Cadastro realizado no servidor, mas houve um erro ao atualizar a página local.", "error");
+                        // Habilitar botão novamente, pois o estado do frontend está inconsistente
+                        // submitButton.disabled = false;
+                        // submitButton.textContent = 'Cadastrar';
+                    }
+
+                } else {
+                    // --- ERRO: Backend retornou um erro ---
+                    const errorResult = await response.json().catch(() => ({ message: `Erro ${response.status}: ${response.statusText}` }));
+                    console.error("Erro do Backend:", errorResult);
+                    showMessage(`Falha no cadastro: ${errorResult.message || 'Erro desconhecido do servidor.'}`, 'error');
+                    // Habilitar botão novamente
+                    // submitButton.disabled = false;
+                    // submitButton.textContent = 'Cadastrar';
+                }
+
+            } catch (error) {
+                // --- ERRO: Falha de rede ou conexão ---
+                console.error('Erro na requisição fetch:', error);
+                showMessage('Erro de conexão ao tentar cadastrar. Verifique sua rede ou tente mais tarde.', 'error');
+                // Habilitar botão novamente
+                // submitButton.disabled = false;
+                // submitButton.textContent = 'Cadastrar';
             }
-
-            // 2. APLICAR O TEMA VISUALMENTE (de forma temporária)
-            applyTheme(selectedTreeValue);
-
-            // 3. Exibir mensagem de sucesso e indicar redirecionamento para o PERFIL
-            showMessage(`Cadastro de ${username} realizado! Redirecionando para o seu perfil...`, 'success');
-
-            // 4. Limpar o formulário (campos e seleção da árvore)
-            form.reset();
-
-            // 5. AGENDAR A REMOÇÃO DO TEMA VISUAL E O REDIRECIONAMENTO PARA O PERFIL
-            const redirectDelay = 1500; // Tempo em milissegundos
-            console.log(`Agendando reset visual e redirecionamento para profile.html em ${redirectDelay}ms`); // Mensagem do console atualizada
-
-            setTimeout(() => {
-                // 5a. Resetar o tema visual desta página para o padrão
-                applyTheme(null);
-                console.log('Tema visual da página de cadastro resetado.');
-
-                // 5b. Redirecionar para a página de PERFIL <<< ALTERADO AQUI >>>
-                window.location.href = 'profile.html';
-
-            }, redirectDelay);
-
-            // --- Envio para Backend (Exemplo Comentado) ---
-            /* fetch(...) */
-            // --- Fim do Exemplo ---
+            // --- FIM: Exemplo de código para envio ao Backend --- */
 
         }); // Fim do event listener 'submit'
     } else {
         console.error("Elemento #registration-form não encontrado.");
     }
 
-}); // Fim do DOMContentLoaded
+});
