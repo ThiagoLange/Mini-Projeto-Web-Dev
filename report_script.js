@@ -1,14 +1,8 @@
 // Arquivo: report_script.js
-// Modificado para buscar dados do backend e formatar data do gráfico como DD/MM/YYYY
+// Configurado para buscar dados do backend.
+// A simulação de API agora usa dados do localStorage para refletir o perfil.
 
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Mock Data (Será substituído pela chamada ao backend) ---
-    // const mockReforestationData = [
-    //     { user: "Alice", species: "Ipe", quantity: 15, date: "2025-04-10" },
-    //     { user: "Bob", species: "Angico", quantity: 25, date: "2025-04-12" },
-    //     // ... mais dados mock
-    // ];
-
     // --- Seletores ---
     const appContainer = document.getElementById('app-container');
     const searchForm = document.getElementById('report-search-form');
@@ -16,8 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchSpeciesSelect = document.getElementById('search-species');
     const resultsContainer = document.getElementById('results-table-container');
     const chartCanvas = document.getElementById('planting-chart');
-    let plantingChartInstance = null; // To hold the chart object
-    let allReforestationData = []; // Para armazenar todos os dados vindos do backend
+    let plantingChartInstance = null;
+    let allReforestationData = []; // Armazenará os dados vindos do backend ou da simulação
 
     // --- Funções de Tema ---
     function applyTheme(themeName) {
@@ -26,9 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
         appContainer.classList.remove(...themes);
         if (themeName && themes.includes(`theme-${themeName}`)) {
             appContainer.classList.add(`theme-${themeName}`);
-            console.log(`Report: Tema '${themeName}' aplicado.`);
-        } else {
-             console.log(`Report: Nenhum tema válido ('${themeName}') ou tema padrão.`);
         }
     }
 
@@ -41,9 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Função para Exibir Resultados da Busca ---
+    // --- Função para Exibir Resultados da Busca na Tabela ---
     function displayResults(data) {
-        resultsContainer.innerHTML = ''; // Limpa resultados anteriores
+        resultsContainer.innerHTML = '';
 
         if (!data || data.length === 0) {
             resultsContainer.innerHTML = '<p>Nenhum registro encontrado para os critérios informados.</p>';
@@ -70,11 +61,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 day: '2-digit', month: '2-digit', year: 'numeric'
             });
             row.innerHTML = `
-                <td>${record.user}</td>
-                <td>${record.species}</td>
-                <td>${record.quantity}</td>
+                <td>${record.user || 'N/A'}</td>
+                <td>${record.species || 'N/A'}</td>
+                <td>${record.quantity || 0}</td>
                 <td>${displayDate}</td>
-                 `;
+            `;
             tbody.appendChild(row);
         });
 
@@ -85,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Função para Gerar o Gráfico de Linha (Acumulado) ---
     function generateChart(data) {
-         if (plantingChartInstance) {
+        if (plantingChartInstance) {
             plantingChartInstance.destroy();
             plantingChartInstance = null;
         }
@@ -94,21 +85,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const noDataMessage = chartContainerDiv.querySelector('p.no-data-message');
         if (noDataMessage) noDataMessage.remove();
 
-
         if (!chartCanvas || !data || data.length === 0) {
             console.warn("Report: Canvas não encontrado ou sem dados para gerar gráfico.");
-             if(chartContainerDiv && !chartContainerDiv.querySelector('h2')) {
-                 const h2 = document.createElement('h2');
-                 h2.textContent = 'Total de Árvores Plantadas (Acumulado)';
-                 chartContainerDiv.insertBefore(h2, chartCanvas);
-             }
-             if(chartContainerDiv && !chartContainerDiv.querySelector('p.no-data-message')) {
+            if (chartContainerDiv && !chartContainerDiv.querySelector('h2')) {
+                const h2 = document.createElement('h2');
+                h2.textContent = 'Total de Árvores Plantadas (Acumulado)';
+                chartContainerDiv.insertBefore(h2, chartCanvas);
+            }
+            if (chartContainerDiv && !chartContainerDiv.querySelector('p.no-data-message')) {
                 const p = document.createElement('p');
                 p.textContent = 'Sem dados suficientes para exibir o gráfico com os filtros aplicados.';
                 p.className = 'no-data-message';
                 chartContainerDiv.appendChild(p);
-             }
-             if (chartCanvas) chartCanvas.style.display = 'none';
+            }
+            if (chartCanvas) chartCanvas.style.display = 'none';
             return;
         }
 
@@ -119,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const cumulativeData = {};
         let cumulativeTotal = 0;
         sortedData.forEach(record => {
-            cumulativeTotal += record.quantity;
+            cumulativeTotal += record.quantity; // Certifique-se que quantity é um número
             const dateKey = record.date;
             cumulativeData[dateKey] = cumulativeTotal;
         });
@@ -145,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false, // Crucial para respeitar altura do container CSS
+                maintainAspectRatio: false,
                 plugins: {
                     title: {
                         display: true,
@@ -156,14 +146,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     y: {
                         beginAtZero: true,
                         title: {
-                             display: true,
-                             text: 'Quantidade Acumulada'
+                            display: true,
+                            text: 'Quantidade Acumulada'
                         }
                     },
                     x: {
-                         title: {
-                             display: true,
-                             text: 'Data (DD/MM/YYYY)'
+                        title: {
+                            display: true,
+                            text: 'Data (DD/MM/YYYY)'
                         }
                     }
                 }
@@ -198,112 +188,121 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("Report: Formulário de busca #report-search-form não encontrado.");
     }
 
-    /* --- CÓDIGO PARA BUSCAR DADOS DO BACKEND ---
-    // Esta função será chamada para obter os dados de reflorestamento.
-    // Substitua '/api/reforestation-data' pela URL REAL do seu endpoint de backend.
-
-    async function fetchReforestationDataFromBackend() {
-        const loadingMessageArea = resultsContainer; 
+    // --- FUNÇÃO PARA BUSCAR DADOS (DO BACKEND OU SIMULADOS) ---
+    async function fetchReforestationData() {
+        const loadingMessageArea = resultsContainer;
         loadingMessageArea.innerHTML = '<p>Carregando dados do relatório...</p>';
+        if (plantingChartInstance) {
+            plantingChartInstance.destroy();
+            plantingChartInstance = null;
+        }
+        if (chartCanvas) chartCanvas.style.display = 'none';
+        const existingNoDataMessage = document.querySelector('#chart-container p.no-data-message');
+        if(existingNoDataMessage) existingNoDataMessage.remove();
 
         try {
-            // const response = await fetch('/api/reforestation-data', { // EXEMPLO DE ENDPOINT
-            //     method: 'GET', 
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //         // 'Authorization': 'Bearer SEU_TOKEN_JWT_AQUI' // Se a API for protegida
-            //     }
-            // });
+            // ***** INÍCIO: CÓDIGO REAL PARA CHAMADA AO BACKEND (COMENTADO) *****
+            // Substitua '/api/reforestation-data' pela URL REAL do seu endpoint.
+            // Descomente este bloco e comente/remova o bloco de SIMULAÇÃO abaixo.
+            /*
+            console.log("Tentando buscar dados do BACKEND REAL...");
+            const response = await fetch('/api/reforestation-data', { // EXEMPLO DE ENDPOINT
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Authorization': 'Bearer SEU_TOKEN_JWT_AQUI' // Se a API for protegida
+                }
+            });
+            */
+            // ***** FIM: CÓDIGO REAL PARA CHAMADA AO BACKEND *****
 
-            // ---- INÍCIO: Simulação de chamada de API para TESTE LOCAL ----
-            console.warn("Usando dados MOCK para simulação de API. Comente/remova para produção.");
-            await new Promise(resolve => setTimeout(resolve, 1000)); 
-            const mockBackendResponse = [ 
-                { user: "Alice", species: "Ipe", quantity: 15, date: "2025-04-10" },
-                { user: "Bob", species: "Angico", quantity: 25, date: "2025-04-12" },
-                { user: "Alice", species: "Aroeira", quantity: 10, date: "2025-04-15" },
-                { user: "Charlie", species: "Ipe", quantity: 30, date: "2025-04-18" },
-                { user: "Bob", species: "Ipe", quantity: 20, date: "2025-04-20" },
-                { user: "Alice", species: "Jequitiba", quantity: 5, date: "2025-04-22" },
-                { user: "Alice", species: "Ipe", quantity: 12, date: "2025-04-25" },
-                { user: "David", species: "PerobaCampo", quantity: 40, date: "2025-04-28" },
-                { user: "Bob", species: "Angico", quantity: 18, date: "2025-05-01" },
-                { user: "Eve", species: "Angico", quantity: 22, date: "2025-05-04" },
-                { user: "Frank", species: "Ipe", quantity: 50, date: "2025-05-05" },
-                { user: "Grace", species: "Aroeira", quantity: 35, date: "2025-05-07" }
-            ];
-            const response = { 
+
+            // ***** INÍCIO: SIMULAÇÃO DE CHAMADA DE API USANDO DADOS DO LOCALSTORAGE (PERFIL) *****
+            // Este bloco simula uma resposta da API para que o script funcione sem um backend.
+            // Ele lê os dados do localStorage, que são os mesmos exibidos no perfil.
+            console.warn("Usando dados SIMULADOS do localStorage para o relatório. Comente/remova para produção com backend.");
+            await new Promise(resolve => setTimeout(resolve, 500)); // Simula pequeno atraso da rede
+
+            let simulatedDataFromProfile = [];
+            const loggedUser = localStorage.getItem('userName'); // Pega o usuário "logado"
+
+            if (loggedUser) {
+                const speciesTypes = ["Ipe", "Angico", "Aroeira", "Jequitiba", "PerobaCampo"];
+                let dateEntryOffset = 0; // Para variar as datas fictícias
+
+                speciesTypes.forEach(species => {
+                    const totalSpeciesCount = parseInt(localStorage.getItem(`treesPlanted_${species}`) || '0', 10);
+
+                    if (totalSpeciesCount > 0) {
+                        // Lógica para criar múltiplos registros que somem o totalSpeciesCount
+                        let countRemaining = totalSpeciesCount;
+                        while (countRemaining > 0) {
+                            // Gera uma quantidade aleatória para esta entrada, até um máximo (ex: 15 ou o restante)
+                            let quantityForThisEntry = Math.min(countRemaining, Math.floor(Math.random() * 15) + 1);
+                             if (quantityForThisEntry <= 0 && countRemaining > 0) quantityForThisEntry = countRemaining; // Garante que se retire algo
+
+                            simulatedDataFromProfile.push({
+                                user: loggedUser,
+                                species: species,
+                                quantity: quantityForThisEntry,
+                                // Gera datas fictícias retroativas simples
+                                date: new Date(Date.now() - (dateEntryOffset * 3 + Math.floor(Math.random()*3)) * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+                            });
+                            countRemaining -= quantityForThisEntry;
+                            dateEntryOffset++;
+                        }
+                    }
+                });
+            }
+
+            // Fallback se não houver dados no localStorage para simular
+            if (simulatedDataFromProfile.length === 0 && loggedUser) {
+                 console.log(`Nenhum dado de plantio encontrado no localStorage para o usuário '${loggedUser}'. Exibindo mock padrão.`);
+                 simulatedDataFromProfile.push({ user: loggedUser, species: "Exemplo Ipê", quantity: 5, date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]});
+                 simulatedDataFromProfile.push({ user: loggedUser, species: "Exemplo Angico", quantity: 8, date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]});
+            } else if (simulatedDataFromProfile.length === 0 && !loggedUser) {
+                console.log("Nenhum usuário logado e nenhum dado no localStorage. Exibindo mock genérico.");
+                simulatedDataFromProfile.push({ user: "Visitante Mock", species: "Ipê Genérico", quantity: 10, date: "2025-05-01" });
+                simulatedDataFromProfile.push({ user: "Visitante Mock", species: "Angico Genérico", quantity: 15, date: "2025-05-05" });
+            }
+
+            const response = { // Simula o objeto de resposta do fetch
                 ok: true,
-                json: async () => mockBackendResponse,
+                json: async () => simulatedDataFromProfile, // Usa os dados simulados
                 status: 200,
-                statusText: "OK (Mocked)"
+                statusText: "OK (Simulated from LocalStorage)"
             };
-            // ---- FIM: Simulação de chamada de API ----
+            // ***** FIM: SIMULAÇÃO DE CHAMADA DE API *****
 
 
             if (response.ok) {
                 const data = await response.json();
-                console.log("Dados recebidos do backend (ou mock):", data);
-                allReforestationData = data; 
-                
-                if (data.length === 0) {
-                    loadingMessageArea.innerHTML = '<p>Nenhum dado de reflorestamento encontrado no servidor.</p>';
+                console.log("Dados para o relatório (simulados do localStorage ou do backend):", data);
+                allReforestationData = data.map(d => ({...d, quantity: Number(d.quantity) || 0})); // Garante que quantity é número
+
+                if (allReforestationData.length === 0) {
+                    loadingMessageArea.innerHTML = '<p>Nenhum dado de reflorestamento encontrado.</p>';
                     const chartContainerDiv = document.getElementById('chart-container');
-                    if (plantingChartInstance) plantingChartInstance.destroy();
-                    if (chartCanvas) chartCanvas.style.display = 'none';
-                    const noDataGraphMsg = chartContainerDiv.querySelector('p.no-data-message');
-                    if (noDataGraphMsg) noDataGraphMsg.remove();
-                    if(chartContainerDiv && !chartContainerDiv.querySelector('p.no-data-message')) {
-                        const p = document.createElement('p');
-                        p.textContent = 'Sem dados para exibir o gráfico.';
-                        p.className = 'no-data-message';
-                        chartContainerDiv.appendChild(p);
-                    }
+                    // ... (lógica para limpar mensagem de "sem dados" do gráfico)
                 } else {
-                    displayResults(allReforestationData); 
-                    generateChart(allReforestationData); 
+                    displayResults(allReforestationData);
+                    generateChart(allReforestationData);
                 }
             } else {
+                // ... (tratamento de erro do backend)
                 const errorResult = await response.json().catch(() => ({ message: `Erro ${response.status} ao buscar dados: ${response.statusText}` }));
                 console.error("Erro do backend ao buscar dados do relatório:", errorResult);
                 loadingMessageArea.innerHTML = `<p>Falha ao carregar dados do relatório: ${errorResult.message}</p>`;
             }
         } catch (networkError) {
+            // ... (tratamento de erro de rede)
             console.error("Erro de rede ao buscar dados do relatório:", networkError);
             loadingMessageArea.innerHTML = `<p>Erro de conexão ao tentar buscar dados do relatório. Verifique sua rede.</p>`;
         }
     }
-    --- FIM DO CÓDIGO PARA BUSCAR DADOS DO BACKEND --- */
 
     // --- Inicialização ---
-    loadSavedTheme();
-
-    // DESCOMENTE a linha abaixo para ativar a busca de dados do backend:
-    // fetchReforestationDataFromBackend(); 
-
-    if (typeof fetchReforestationDataFromBackend === 'undefined' || !fetchReforestationDataFromBackend) {
-        console.warn("Report: 'fetchReforestationDataFromBackend' não está definido ou não foi chamado. Usando dados mock estáticos para exibição inicial.");
-        allReforestationData = [ 
-                { user: "Alice (mock)", species: "Ipe", quantity: 15, date: "2025-04-10" },
-                { user: "Bob (mock)", species: "Angico", quantity: 25, date: "2025-04-12" },
-                { user: "Alice (mock)", species: "Aroeira", quantity: 10, date: "2025-04-15" },
-        ];
-        if (allReforestationData.length > 0) {
-            displayResults(allReforestationData);
-            generateChart(allReforestationData);
-        } else {
-            resultsContainer.innerHTML = '<p>Nenhum dado de demonstração para exibir. Configure a busca ao backend.</p>';
-            const chartContainerDiv = document.getElementById('chart-container');
-            if (chartCanvas) chartCanvas.style.display = 'none';
-             if(chartContainerDiv && !chartContainerDiv.querySelector('p.no-data-message')) {
-                const p = document.createElement('p');
-                p.textContent = 'Sem dados para exibir o gráfico.';
-                p.className = 'no-data-message';
-                chartContainerDiv.appendChild(p);
-             }
-        }
-    } else {
-         fetchReforestationDataFromBackend(); 
-    }
+    loadSavedTheme(); // Carrega o tema do usuário
+    fetchReforestationData(); // Busca os dados (simulados do localStorage ou do backend)
 
 }); // Fim do DOMContentLoaded
