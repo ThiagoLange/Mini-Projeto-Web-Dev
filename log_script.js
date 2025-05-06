@@ -1,101 +1,140 @@
-// Arquivo: log_script.js (Versão Completa Revisada - Foco no Tema)
+// Arquivo: log_script.js
 
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Seletores ---
     const logForm = document.getElementById('log-form');
     const quantityInput = document.getElementById('quantity');
     const speciesSelect = document.getElementById('species');
     const logMessageDiv = document.getElementById('log-message');
-    const appContainer = document.getElementById('app-container'); // Necessário para applyTheme
+    const appContainer = document.getElementById('app-container');
 
-    // --- Função para Aplicar o Tema ---
-    // <<< ESSENCIAL: Garanta que esta função esteja completa e correta >>>
     function applyTheme(themeName) {
-        if (!appContainer) {
-            console.error("Log: Elemento #app-container não encontrado para aplicar tema.");
-            return;
-        }
+        if (!appContainer) { return; }
         const themes = ['theme-pau-brasil', 'theme-castanheira', 'theme-peroba-rosa'];
         const themeClassName = `theme-${themeName}`;
-
-        appContainer.classList.remove(...themes); // Limpa temas antigos
-
+        appContainer.classList.remove(...themes);
         if (themeName && themes.includes(themeClassName)) {
             appContainer.classList.add(themeClassName);
-            console.log(`Log: Tema '${themeName}' aplicado.`);
-        } else {
-            console.log(`Log: Nenhum tema válido ('${themeName}') ou tema padrão.`);
         }
     }
 
-    // --- Função para Carregar o Tema Salvo ---
-    // <<< ESSENCIAL: Garanta que esta função esteja completa e correta >>>
     function loadSavedTheme() {
         try {
             const userTheme = localStorage.getItem('userTheme');
-            console.log(`Log: Lendo tema do localStorage: ${userTheme}`);
-            applyTheme(userTheme); // Chama a função para aplicar o tema lido
-        } catch (e) {
-            console.error("Log: Erro ao carregar tema do localStorage:", e);
-        }
+            applyTheme(userTheme);
+        } catch (e) { console.error("Log: Erro ao carregar tema:", e); }
     }
 
-    // --- Outras Funções (showLogMessage, clearLogMessage - mantenha as suas) ---
     function showLogMessage(text, type = 'success') {
         if(logMessageDiv) {
             logMessageDiv.textContent = text;
-            logMessageDiv.className = `message message-${type}`; // Adiciona classes base e de tipo
+            logMessageDiv.className = `message message-${type}`;
+            logMessageDiv.style.display = 'block';
+            setTimeout(() => {
+                if(logMessageDiv) {
+                     logMessageDiv.style.display = 'none';
+                     logMessageDiv.textContent = '';
+                     logMessageDiv.className = 'message';
+                }
+            }, 3000);
         }
-     }
+    }
     function clearLogMessage() {
         if(logMessageDiv) {
             logMessageDiv.textContent = '';
-            logMessageDiv.className = ''; // Limpa classes
+            logMessageDiv.className = 'message';
+            logMessageDiv.style.display = 'none';
         }
     }
 
-    // --- Lógica Principal ---
-    loadSavedTheme(); // <<< CARREGA O TEMA LOGO AO INICIAR
+    loadSavedTheme();
 
     if (logForm) {
-        logForm.addEventListener('submit', (event) => {
+        logForm.addEventListener('submit', async (event) => { // async para o exemplo de backend
             event.preventDefault();
             clearLogMessage();
 
-            // Obter valores
             const quantity = parseInt(quantityInput.value, 10);
             const species = speciesSelect.value;
 
-            // Validar (mantenha sua validação)
-            if (isNaN(quantity) || quantity <= 0 /* ... */) { /* ... */ return; }
-            if (!species || species === "" /* ... */) { /* ... */ return; }
-
-            // ATUALIZAÇÃO DAS CONTAGENS (mantenha sua lógica)
-            try {
-                // Total
-                let currentTotal = parseInt(localStorage.getItem('totalTreesPlanted') || '0', 10);
-                currentTotal += quantity;
-                localStorage.setItem('totalTreesPlanted', currentTotal.toString());
-                // Espécie
-                const speciesKey = `treesPlanted_${species}`;
-                let speciesCount = parseInt(localStorage.getItem(speciesKey) || '0', 10);
-                speciesCount += quantity;
-                localStorage.setItem(speciesKey, speciesCount.toString());
-
-                console.log(`Log: Contagens atualizadas - Total=${currentTotal}, ${speciesKey}=${speciesCount}`);
-
-            } catch (e) {
-                console.error("Log: Erro ao atualizar contagens no localStorage:", e);
-                showLogMessage("Aviso: Erro ao atualizar contagens.", "error");
+            if (isNaN(quantity) || quantity <= 0) {
+                showLogMessage("Por favor, insira uma quantidade válida.", "error");
+                return;
+            }
+            if (!species || species === "") {
+                showLogMessage("Por favor, selecione uma espécie.", "error");
+                return;
             }
 
-            // Feedback e Limpeza
-            showLogMessage(`Ação registrada: ${quantity} ${species} plantadas!`, 'success');
-            logForm.reset();
+            const userName = localStorage.getItem('userName');
+            if (!userName) {
+                showLogMessage("Usuário não identificado. Por favor, faça o cadastro/login primeiro.", "error");
+                return;
+            }
 
-        }); // Fim do event listener 'submit'
-    } else {
-        console.error("Log: Elemento #log-form não encontrado.");
+            // --- Salvar apenas o registro individual ---
+            try {
+                const logEntry = {
+                    id: Date.now().toString() + Math.random().toString(36).substring(2, 7),
+                    username: userName,
+                    species: species,
+                    quantity: quantity,
+                    date: new Date().toISOString().split('T')[0] // Formato AAAA-MM-DD
+                };
+
+                let reforestationLogEntries = JSON.parse(localStorage.getItem('reforestationLogEntries')) || [];
+                reforestationLogEntries.push(logEntry);
+                localStorage.setItem('reforestationLogEntries', JSON.stringify(reforestationLogEntries));
+                console.log("Novo registro de plantio adicionado à lista geral:", logEntry);
+
+                // As chaves 'treesPlanted_*' e 'totalTreesPlanted' NÃO SÃO MAIS ATUALIZADAS DIRETAMENTE AQUI.
+                // O profile_script.js calculará esses valores a partir de 'reforestationLogEntries'.
+
+                showLogMessage(`Ação registrada: ${quantity} ${species} plantadas por ${userName}!`, 'success');
+                logForm.reset();
+
+            } catch (e) {
+                console.error("Log: Erro ao salvar registro de plantio:", e);
+                showLogMessage("Aviso: Erro ao salvar dados do plantio.", "error");
+            }
+            // --- FIM DA LÓGICA ATUALIZADA ---
+
+
+            /* --- EXEMPLO DE CÓDIGO PARA ENVIAR LOG DE AÇÃO AO BACKEND (COMENTADO) ---
+            // const logEntryDataForBackend = {
+            //     username: userName,
+            //     species: species,
+            //     quantity: quantity,
+            //     date: new Date().toISOString()
+            // };
+            // const submitButton = logForm.querySelector('button[type="submit"]');
+            // if (submitButton) {
+            //     submitButton.disabled = true;
+            //     submitButton.textContent = 'Registrando...';
+            // }
+            // console.log("Tentando enviar log de ação para o backend:", logEntryDataForBackend);
+            // try {
+            //     const response = await fetch('/api/log_action', {
+            //         method: 'POST',
+            //         headers: { 'Content-Type': 'application/json' },
+            //         body: JSON.stringify(logEntryDataForBackend)
+            //     });
+            //     if (response.ok) {
+            //         console.log("Log de ação salvo com sucesso no backend.");
+            //     } else {
+            //         const errorResult = await response.json().catch(() => ({ message: `Erro ${response.status} ao registrar no servidor.` }));
+            //         console.error("Erro do backend:", errorResult);
+            //         showLogMessage(`Falha ao registrar no servidor: ${errorResult.message}. (Dados salvos localmente)`, "error");
+            //     }
+            // } catch (networkError) {
+            //     console.error("Erro de rede:", networkError);
+            //     showLogMessage("Erro de conexão ao registrar no servidor. (Dados salvos localmente)", "error");
+            // } finally {
+            //     if (submitButton) {
+            //         submitButton.disabled = false;
+            //         submitButton.textContent = 'Registrar Ação';
+            //     }
+            // }
+            --- FIM DO EXEMPLO COMENTADO --- */
+        });
     }
-
-}); // Fim do DOMContentLoaded
+});
